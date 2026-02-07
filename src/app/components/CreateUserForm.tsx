@@ -11,6 +11,7 @@ const CreateUserForm = () => {
     defaultValues: {
       username: "",
       password: "",
+      name: "",
     }
   });
 
@@ -18,25 +19,24 @@ const CreateUserForm = () => {
   const createUser: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     try {
-      // Use NEXT_PUBLIC_ prefix for client-side env vars
-      const api ="https://nestjs-restful-api.vercel.app/api/users/login";
-      
+      const api = process.env.NEXT_PUBLIC_CREATE_API!;
+
       const response = await fetch(api, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data), // Send the actual form data
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
-      console.log(result)
-
-      // Use response.ok to check for 200-299 status codes
+      if(response.status == 404) {
+        alert(result.errors);
+      }
       if (!response.ok) {
-        alert(`Error: ${result.message || "Failed to connect api"}`);
+        alert(`Error: ${result.message}`);
       } else {
-        alert(`Success: login ${result.username }!`);
+        alert(`Success: login ${result.data.username}!`);
         reset();
         router.refresh();
       }
@@ -48,23 +48,34 @@ const CreateUserForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(createUser)} className="flex flex-col space-y-4">
-       {/* ... your inputs stay exactly the same ... */}
-       <input 
-          {...register("username", { required: true })} 
-          placeholder="Username" 
+    <div className="flex flex-col gap-x-3 items-center m-5">
+      <h1 className="items-center font-bold">
+        SignUp
+      </h1>
+      <form onSubmit={handleSubmit(createUser)} className="flex flex-col space-y-4">
+        {/* ... your inputs stay exactly the same ... */}
+        <input
+          {...register("username", { required: true })}
+          placeholder="Username"
           className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-       />
-       <input 
+        />
+        <input
           type="password"
-          {...register("password", { required: true })} 
+          {...register("password", { required: true })}
           placeholder="Password"
           className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-       />
-       <button className="py-2 mt-2 bg-blue-600 rounded-md" type="submit" disabled={isLoading}>
-         {isLoading ? "Uploading..." : "Create"}
-       </button>
-    </form>
+        />
+        <input
+          type="name"
+          {...register("name", { required: true })}
+          placeholder="name"
+          className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
+        />
+        <button className="py-2 mt-2 bg-blue-600 rounded-md" type="submit" disabled={isLoading}>
+          {isLoading ? "Uploading..." : "Create"}
+        </button>
+      </form>
+    </div>
   );
 };
 
