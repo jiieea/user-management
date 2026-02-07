@@ -1,71 +1,88 @@
 "use client"
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
-import { useForm, SubmitHandler ,FieldValues } from 'react-hook-form'
+import {useRouter} from 'next/navigation';
+import React, {useState} from 'react'
+import Cookies from "js-cookie";
+import {useForm, SubmitHandler, FieldValues} from 'react-hook-form'
+
 const LoginForm = () => {
-    const  [ isLoading , setIsLoading ] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter()
-    const { reset , handleSubmit , register} = useForm<FieldValues>({
-        defaultValues : {
+    const {reset, handleSubmit, register} = useForm<FieldValues>({
+        defaultValues: {
             username: "",
             password: "",
         }
     })
 
-
-    const handleUserLogin : SubmitHandler<FieldValues> = async (values) => {
+    const handleUserLogin: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
-        try{
-            const api = process.env.NEXT_PUBLIC_LOGIN_API!;
-            const response = await fetch(api , {
+        try {
+            const api = process.env.NEXT_PUBLIC_LOGIN_USER_API!;
+            const response = await fetch(api, {
                 method: 'POST',
                 headers: {
-                    'Content-Type' : "application/json"
+                    'Content-Type': "application/json"
                 },
                 body: JSON.stringify(values)
             })
-
             const result = await response.json();
-            if(response.status == 404 || response.status == 401) {
+            // store the token once user login is success
+            if (response.ok) {
+                Cookies.set('token', result.data.token, {expires: 7});
+            }
+            console.debug(result)
+            if (response.status == 404 || response.status == 401) {
                 alert(result.errors);
             }
 
-            alert(`Welcome aboard ${ result.data.username}`)
+            alert(`Welcome aboard ${result.data.username}`)
             router.push('/dashboard')
             reset();
             setIsLoading(false);
-        }catch(e: unknown) {
-            if(e instanceof Error) {
-                throw new Error(e.message)
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                alert(e.message)
             }
         }
     }
-  return (
-    <div>
-         <div className="flex flex-col gap-x-3 items-center m-5">
-      <h1 className="items-center font-bold">
-        Login
-      </h1>
-      <form onSubmit={handleSubmit(handleUserLogin)} className="flex flex-col space-y-4">
-        {/* ... your inputs stay exactly the same ... */}
-        <input
-          {...register("username", { required: true })}
-          placeholder="Username"
-          className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-        />
-        <input
-          type="password"
-          {...register("password", { required: true })}
-          placeholder="Password"
-          className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-        />
-        <button className="py-2 mt-2 bg-blue-600 rounded-md" type="submit" disabled={isLoading}>
-          {isLoading ? "Wait..." : "Login"}
-        </button>
-      </form>
-    </div>
-    </div>
-  )
+    return (
+        <div className="min-h-screen flex items-center justify-center px-4">
+            <div className="max-w-md w-full relative flex flex-col p-4 rounded-md items-center justify-center text-black bg-white">
+            <div className="text-2xl font-bold mb-2 text-[#1e0e4b] text-center">Welcome back to <span
+                className="text-[#7747ff]">App</span></div>
+            <div className="text-sm font-normal mb-4 text-center text-[#1e0e4b]">Log in to your account</div>
+            <form className="flex flex-col gap-3" onSubmit={handleSubmit(handleUserLogin)}>
+                <div className="block relative">
+                    <label htmlFor="username"
+                           className="block text-gray-600 cursor-text text-sm leading-[140%] font-normal mb-2">Username</label>
+                    <input type="text" id="text" placeholder="Enter your username"
+                           className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5 text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2 ring-offset-2  ring-gray-900 outline-0"
+                           {...register('username' , { required: true })}
+                    />
+                </div>
+                <div className="block relative">
+                    <label htmlFor="password"
+                           className="block text-gray-600 cursor-text text-sm leading-[140%] font-normal mb-2">Password</label>
+                    <input type="text" id="password" placeholder="Enter your password"
+                           {...register('password' , { required: true })}
+                           className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5
+                           text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2
+                           ring-offset-2 ring-gray-900 outline-0"/>
+                </div>
+                <div>
+                    <a className="text-sm text-[#7747ff]" href="#">Forgot your password?
+                    </a></div>
+                <button type="submit"
+                        className="bg-[#7747ff] w-max m-auto px-6 py-2 rounded text-white text-sm font-normal">{
+                    isLoading ? "Login-in" : "Login"
+                }
+                </button>
+            </form>
+            <div className="text-sm text-center mt-[1.6rem]">Don’t have an account yet? <a
+                className="text-sm text-[#7747ff] cursor-pointer" onClick={()=> router.push('/signup')}>Sign up for free!</a></div>
+            </div>
+        </div>
+    )
 }
 
 export default LoginForm

@@ -2,7 +2,7 @@ import{ NextResponse, type NextRequest } from "next/server"
 
 
 export const proxy = (req: NextRequest) => {
-    const token = req.cookies.get('__next_hmr_refresh_hash__')?.value;
+    const token = req.cookies.get('token')?.value;
     
     if(!token) {
         const redirectUrl = new URL('/signup', req.url);

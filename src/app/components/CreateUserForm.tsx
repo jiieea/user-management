@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 
 const CreateUserForm = () => {
@@ -30,16 +30,18 @@ const CreateUserForm = () => {
       });
 
       const result = await response.json();
-      if(response.status == 404) {
-        alert(result.errors);
-      }
       if (!response.ok) {
-        alert(`Error: ${result.message}`);
-      } else {
-        alert(`Success: login ${result.data.username}!`);
-        reset();
-        router.refresh();
+        const errorMessage =
+          response.status === 404
+            ? result.errors
+            : result.message || "Request failed.";
+        alert(`Error: ${errorMessage}`);
+        return;
       }
+
+      alert(`Success: login ${result.data.username}!`);
+      reset();
+      router.refresh();
     } catch (e: unknown) {
       alert("Network error: Could not reach the server." + e);
     } finally {
@@ -48,34 +50,51 @@ const CreateUserForm = () => {
   };
 
   return (
-    <div className="flex flex-col gap-x-3 items-center m-5">
-      <h1 className="items-center font-bold">
-        SignUp
-      </h1>
-      <form onSubmit={handleSubmit(createUser)} className="flex flex-col space-y-4">
-        {/* ... your inputs stay exactly the same ... */}
-        <input
-          {...register("username", { required: true })}
-          placeholder="Username"
-          className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-        />
-        <input
-          type="password"
-          {...register("password", { required: true })}
-          placeholder="Password"
-          className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-        />
-        <input
-          type="name"
-          {...register("name", { required: true })}
-          placeholder="name"
-          className="mt-4 py-3 px-4 rounded-md bg-neutral-700 text-white"
-        />
-        <button className="py-2 mt-2 bg-blue-600 rounded-md" type="submit" disabled={isLoading}>
-          {isLoading ? "Uploading..." : "Create"}
-        </button>
-      </form>
-    </div>
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md w-full relative flex flex-col p-4 rounded-md items-center justify-center text-black bg-white">
+          <div className="text-2xl font-bold mb-2 text-[#1e0e4b] text-center">Welcome back to <span
+              className="text-[#7747ff]">App</span></div>
+          <div className="text-sm font-normal mb-4 text-center text-[#1e0e4b]">Log in to your account</div>
+          <form className="flex flex-col gap-3" onSubmit={handleSubmit(createUser)}>
+            <div className="block relative">
+              <label htmlFor="username"
+                     className="block text-gray-600 cursor-text text-sm leading-[140%] font-normal mb-2">Username</label>
+              <input type="text" id="text" placeholder="Enter your username"
+                     className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5 text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2 ring-offset-2  ring-gray-900 outline-0"
+                     {...register('username' , { required: true })}
+              />
+            </div>
+            <div className="block relative">
+              <label htmlFor="password"
+                     className="block text-gray-600 cursor-text text-sm leading-[140%] font-normal mb-2">Password</label>
+              <input type="text" id="password" placeholder="Enter your password"
+                     {...register('password' , { required: true })}
+                     className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5
+                           text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2
+                           ring-offset-2 ring-gray-900 outline-0"/>
+            </div>
+            <div className="block relative">
+              <label htmlFor="name"
+                     className="block text-gray-600 cursor-text text-sm leading-[140%] font-normal mb-2">Name</label>
+              <input type="text" id="name" placeholder="Enter your name"
+                     {...register('name' , { required: true })}
+                     className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5
+                           text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2
+                           ring-offset-2 ring-gray-900 outline-0"/>
+            </div>
+            <div>
+              <a className="text-sm text-[#7747ff]" href="#">Forgot your password?
+              </a></div>
+            <button type="submit"
+                    className="bg-[#7747ff] w-max m-auto px-6 py-2 rounded text-white text-sm font-normal">{
+              isLoading ? "Login-in" : "Login"
+            }
+            </button>
+          </form>
+          <div className="text-sm text-center mt-[1.6rem]">Already have an account ? <a
+              className="text-sm text-[#7747ff] cursor-pointer" onClick={()=> router.push('/login')}>Login!</a></div>
+        </div>
+      </div>
   );
 };
 
