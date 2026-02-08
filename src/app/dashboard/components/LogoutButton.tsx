@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import Cookies from "js-cookie";
+import {toast} from "sonner";
 export const LogoutButton = () => {
     const router = useRouter();
     const token = Cookies.get('token')
@@ -15,18 +16,19 @@ export const LogoutButton = () => {
                     "Authorization": token!,
                 },
             })
-
+            Cookies.remove('token');
             const result = await response.json();
             console.debug(result);
-            alert('Logout Successfull');
+            toast.success('Logout Successfull');
             router.push('/login');
+            router.refresh()
         }catch(e: unknown){
             if ( e instanceof Error) {
-                alert('failed to logout')
+                toast.error('failed to logout')
             }
         }
     }
   return (
-    <Button onClick={handleLogoutButton} variant="outline">Button</Button>
+    <Button onClick={handleLogoutButton} className="cursor-pointer" variant="outline">Logout</Button>
   )
 }

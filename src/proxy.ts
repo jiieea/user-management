@@ -1,10 +1,17 @@
-import{ NextResponse, type NextRequest } from "next/server"
+import {NextResponse, type NextRequest} from "next/server"
 
 
 export const proxy = (req: NextRequest) => {
     const token = req.cookies.get('token')?.value;
-    
-    if(!token) {
+    const path = req.nextUrl.pathname;
+    if (path === "/") {
+        if (token) {
+            return NextResponse.redirect(new URL("/dashboard", req.url));
+        } else {
+            return NextResponse.redirect(new URL("/login", req.url))
+        }
+    }
+    if (!token) {
         const redirectUrl = new URL('/signup', req.url);
         return NextResponse.redirect(redirectUrl);
     }
@@ -12,12 +19,11 @@ export const proxy = (req: NextRequest) => {
 }
 
 
-
 // Your provided paths
 export const config = {
     matcher: [
-      '/contacts',
-      '/contacts/addresses',
-      '/dashboard/:path*'
+        '/contacts/:path*',
+        '/dashboard/:path*',
+        '/'
     ]
 }

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import {toast} from "sonner";
 
 const CreateUserForm = () => {
   const router = useRouter();
@@ -35,15 +36,15 @@ const CreateUserForm = () => {
           response.status === 404
             ? result.errors
             : result.message || "Request failed.";
-        alert(`Error: ${errorMessage}`);
+        toast.error(`Error: ${errorMessage}`);
         return;
       }
 
-      alert(`Success: login ${result.data.username}!`);
+      toast.success(`Success:  ${result.data.username}!`);
       reset();
-      router.refresh();
+      router.push('/login');
     } catch (e: unknown) {
-      alert("Network error: Could not reach the server." + e);
+      toast.error("Network error: Could not reach the server." + e);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +88,7 @@ const CreateUserForm = () => {
               </a></div>
             <button type="submit"
                     className="bg-[#7747ff] w-max m-auto px-6 py-2 rounded text-white text-sm font-normal">{
-              isLoading ? "Login-in" : "Login"
+              isLoading ? "Signing..." : "SignUp"
             }
             </button>
           </form>
