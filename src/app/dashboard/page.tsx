@@ -1,9 +1,10 @@
 import React from 'react';
-import { User,  Plus, Users, Star, Clock } from 'lucide-react'; // Optional: Use lucide-react for icons
+import { User, Users, Star, Clock } from 'lucide-react'; // Optional: Use lucide-react for icons
 import { getContact } from '../action/getContact';
 import StatCard from '../components/StatsCard';
 import { ContactTable } from '../components/ContactTable';
-export default async function  DashboardPage() {
+import { AddContactDialog } from '../components/AddContactDialog';
+export default async function DashboardPage() {
     const contacts = await getContact();
     return (
         <div className="space-y-8">
@@ -13,10 +14,7 @@ export default async function  DashboardPage() {
                     <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
                     <p className="text-gray-500">Welcome back! Here’s what’s happening with your network.</p>
                 </div>
-                <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-all">
-                    <Plus size={18} />
-                    Add Contact
-                </button>
+              <AddContactDialog />
             </div>
 
             {/* Stats Grid */}
@@ -27,7 +25,7 @@ export default async function  DashboardPage() {
                 <StatCard title="Total Addresses" value="0" icon={<User className="text-purple-600" />} bgColor="bg-purple-50" />
             </div>
 
-          <ContactTable  contacts={ contacts !}/>
+            <ContactTable contacts={contacts!} />
         </div>
     );
 }
