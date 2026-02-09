@@ -1,28 +1,36 @@
 "use client"
 import { LogoutButton } from "@/app/dashboard/components/LogoutButton";
-
+import { User } from "@/app/types/interfaces";
 interface HeaderProps {
-    user?: { // Make the whole user object optional
-        username?: string;
-        name?: string;
-    }
+    user: User | null; // Keep consistent with your other components
 }
 
 export function Header({ user }: HeaderProps) {
-    // Safe access: if user is undefined, it defaults to "Unknown User"
-    const displayName = user?.username || user?.name || "Guest";
+    const displayName = user?.name || user?.username || "Guest";
+
     return (
-        <header className="w-[86%] rounded-2xl h-20 bg-white px-8 py-5 flex items-center justify-between shadow-md fixed top-0">
-            <div className="flex items-center gap-4">
-                <div className="flex flex-col">
-                    <p className="text-lg hidden md:block">Contact Management</p>
-                    <p className="text-xs text-primary hidden md:block">Where all contacts Gather</p>
-                </div>
-            </div>
-            <div className="flex gap-x-3 items-center">
-                <p className="text-primary text-sm font-normal">
-                    Halo, <span className="text-primary font-semibold">{displayName}</span>
+        <header className="sticky top-0 z-40 w-full h-20 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between border-b border-gray-100 shadow-sm">
+            <div className="flex flex-col">
+                <p className="text-lg font-bold leading-tight hidden md:block text-gray-800">
+                    Contact Management
                 </p>
+                <p className="text-xs text-primary/70 hidden md:block font-medium">
+                    Where all contacts gather
+                </p>
+            </div>
+
+            <div className="flex items-center gap-x-6">
+                <div className="text-right">
+                    <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">
+                        Logged in as
+                    </p>
+                    <p className="text-primary text-sm font-semibold">
+                        {displayName}
+                    </p>
+                </div>
+                
+                <div className="h-8 w-[1px] bg-gray-200 mx-2" /> {/* Divider */}
+                
                 <LogoutButton />
             </div>
         </header>
