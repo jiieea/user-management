@@ -10,3 +10,8 @@ export interface Contact {
     phone: string
     id: string
 }
+
+
+export interface DeleteContactProps {
+    id : string,
+}

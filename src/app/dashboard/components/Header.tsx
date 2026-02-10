@@ -29,8 +29,7 @@ export function Header({ user }: HeaderProps) {
                     </p>
                 </div>
                 
-                <div className="h-8 w-[1px] bg-gray-200 mx-2" /> {/* Divider */}
-                
+                <div className="h-8 w-px bg-gray-200 mx-2" /> {/* Divider */}
                 <LogoutButton />
             </div>
         </header>
