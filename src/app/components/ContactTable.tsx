@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from '@/components/ui/button';
 import { Mail, Phone } from 'lucide-react';
 import { Contact } from '../types/interfaces';
 
@@ -54,9 +53,9 @@ export const ContactTable: React.FC<ContactTableProps> = (
                                             <td className="px-6 py-4 text-gray-600 text-sm">{contact.email}</td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Button className="p-2 hover:bg-white rounded-full border border-transparent bg-neutral-200 hover:border-gray-200 text-gray-400 hover:text-primary transition-all">
+                                                    <button className="p-2 hover:bg-white rounded-full border border-transparent bg-neutral-200 hover:border-gray-200 text-gray-400 hover:text-primary transition-all">
                                                         <Phone size={16} />
-                                                    </Button>
+                                                    </button>
                                                     <button className="p-2 hover:bg-white rounded-full border border-transparent hover:border-gray-200 text-gray-400 hover:text-primary transition-all">
                                                         <Mail size={16} />
                                                     </button>

@@ -29,6 +29,6 @@ export const LogoutButton = () => {
         }
     }
   return (
-    <Button onClick={handleLogoutButton} className="cursor-pointer" variant="outline">Logout</Button>
+    <Button onClick={handleLogoutButton} className="cursor-pointer hover:bg-secondary" variant="ghost">Logout</Button>
   )
 }

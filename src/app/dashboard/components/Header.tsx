@@ -9,7 +9,7 @@ export function Header({ user }: HeaderProps) {
     const displayName = user?.name || user?.username || "Guest";
 
     return (
-        <header className="sticky top-0 z-40 w-full h-20 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between border-b border-gray-100 shadow-sm">
+        <header className="sticky top-0 z-40 w-full h-20 bg-background backdrop-blur-md px-8 flex items-center justify-between border-b border-gray-100 shadow-sm">
             <div className="flex flex-col">
                 <p className="text-lg font-bold leading-tight hidden md:block text-gray-800">
                     Contact Management
