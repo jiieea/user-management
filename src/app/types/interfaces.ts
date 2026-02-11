@@ -15,3 +15,8 @@ export interface Contact {
 export interface DeleteContactProps {
     id : string,
 }
+
+export interface ContactModalForm {
+    contact?: Contact,
+    isEdit?: boolean,
+}

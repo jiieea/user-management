@@ -4,7 +4,7 @@ import DeleteContactButton from "./components/DeleteContactButton";
 import SearchContact from "./components/SearchContact";
 import {CiCirclePlus} from "react-icons/ci";
 import React from "react";
-
+import {AddContact} from "@/app/components/ContactForm";
 
 export default async function ContactsPage() {
   const contacts =  await getContact();
@@ -12,7 +12,6 @@ export default async function ContactsPage() {
     <div className="space-y-6">
       <ContactHeader />
     <SearchContact />
-
       {/* Contacts Table */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <table className="w-full text-left border-collapse">
@@ -36,7 +35,7 @@ export default async function ContactsPage() {
                   <td className="px-6 py-4 text-gray-600 text-sm">{contact.email}</td>
                   <td className="px-6 py-4 text-gray-600 text-sm">{contact.phone}</td>
                   <td className="px-6 py-4 text-right">
-                    <button className="text-primary hover:underline text-sm font-medium mr-4">Edit</button>
+                    <AddContact contact={contact} />
                     <DeleteContactButton id={contact.id} />
                   </td>
                   <td>

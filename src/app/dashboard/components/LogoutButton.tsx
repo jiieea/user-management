@@ -16,10 +16,10 @@ export const LogoutButton = () => {
                     "Authorization": token!,
                 },
             })
+            toast.success('Logout Successfully');
             Cookies.remove('token');
             const result = await response.json();
             console.debug(result);
-            toast.success('Logout Successfull');
             router.push('/login');
             router.refresh()
         }catch(e: unknown){
