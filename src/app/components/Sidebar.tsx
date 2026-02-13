@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 const NAV_ITEMS = [
     { name: 'Dashboard', link: '/dashboard' },
     { name: 'Contacts',  link: '/contacts' },
-    { name: 'Address',   link: '/addresses' }
 ];
 
 export function Sidebar() {

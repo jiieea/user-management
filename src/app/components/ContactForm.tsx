@@ -8,7 +8,6 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import {Plus} from "lucide-react";
 import {Field, FieldGroup} from "@/components/ui/field";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
@@ -45,7 +44,7 @@ export const AddContact: React.FC<ContactModalForm> = ({
     const handleUpdateContact: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_DELETE_CONTACT_API}/${contact?.id}` , {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_UPDATE_CONTACT_API}/${contact?.id}` , {
                 method: "PUT",
                 headers : {
                     "Content-Type": "application/json",
@@ -58,7 +57,7 @@ export const AddContact: React.FC<ContactModalForm> = ({
                 const errorMessage =
                     response.status === 404
                         ? result.errors
-                        : result.message || "Request failed.";
+                        : result.errors || "Request failed.";
                 toast.error(`Error: ${errorMessage}`);
                 return;
             }
