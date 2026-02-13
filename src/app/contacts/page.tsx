@@ -2,10 +2,9 @@ import { getContact } from "../action/getContact";
 import { ContactHeader } from "./components/ContactHeader";
 import DeleteContactButton from "./components/DeleteContactButton";
 import SearchContact from "./components/SearchContact";
-import {CiCirclePlus} from "react-icons/ci";
 import React from "react";
 import {AddContact} from "@/app/components/ContactForm";
-
+import {AddAddressModal} from "@/app/contacts/components/AddAddressModal";
 export default async function ContactsPage() {
   const contacts =  await getContact();
   return (
@@ -39,7 +38,7 @@ export default async function ContactsPage() {
                     <DeleteContactButton id={contact.id} />
                   </td>
                   <td>
-                    <CiCirclePlus className="text-xl"/>
+                    <AddAddressModal contact={contact} />
                   </td>
                 </tr>
               ))

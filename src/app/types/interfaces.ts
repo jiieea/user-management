@@ -11,6 +11,14 @@ export interface Contact {
     id: string
 }
 
+export interface Address {
+    street?: string,
+    city?: string,
+    province?: string,
+    country: string,
+    postal_code: string,
+}
+
 
 export interface DeleteContactProps {
     id : string,
@@ -20,3 +28,4 @@ export interface ContactModalForm {
     contact?: Contact,
     isEdit?: boolean,
 }
+

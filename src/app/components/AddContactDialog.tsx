@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {
     DialogTrigger, Dialog
     , DialogContent, DialogHeader,
@@ -77,17 +77,19 @@ export const AddContactDialog = () => {
                     <DialogHeader>
                         <DialogTitle>Add New Contact</DialogTitle>
                     </DialogHeader>
-                    <FieldGroup>
+                    <FieldGroup className="mt-5">
                         <Field>
                             <Label htmlFor="firstname">Firstname</Label>
                             <Input
                                 id="firstname"
+                                placeholder="First name"
                                 {...register('first_name', {required: true})}
                             />
                         </Field>
                         <Field>
                             <Label htmlFor="lastname">Lastname</Label>
                             <Input
+                                placeholder="last name"
                                 id="lastname"
                                 {...register('last_name', {required: true})} // Matches defaultValues
                             />
