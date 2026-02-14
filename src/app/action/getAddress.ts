@@ -19,8 +19,7 @@ export const getAddressById = async (contactId: string): Promise<Address[] | nul
                 'Content-Type': 'application/json',
                 'Authorization': token!,
             },
-            // Since this is likely a Server Component, consider revalidation:
-            next: { revalidate: 3600 }
+            cache: 'no-cache',
         });
 
         if (!response.ok) {

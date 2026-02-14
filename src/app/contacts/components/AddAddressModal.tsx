@@ -85,7 +85,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = (
                 <DialogContent className="sm:max-w-sm">
                     <form onSubmit={handleSubmit(handleCreateAddress)}>
                         <DialogHeader>
-                            <DialogTitle>Add New Contact</DialogTitle>
+                            <DialogTitle>Add New Address</DialogTitle>
                         </DialogHeader>
                         <FieldGroup className="mt-5">
                             <Field>

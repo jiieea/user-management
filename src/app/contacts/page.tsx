@@ -5,6 +5,7 @@ import SearchContact from "./components/SearchContact";
 import React from "react";
 import {AddContact} from "@/app/components/ContactForm";
 import {AddAddressModal} from "@/app/contacts/components/AddAddressModal";
+
 export default async function ContactsPage() {
   const contacts =  await getContact();
   return (

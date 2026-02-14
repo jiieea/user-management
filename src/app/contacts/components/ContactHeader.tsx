@@ -1,6 +1,5 @@
 import { AddContactDialog } from '@/app/components/AddContactDialog'
 import React from 'react'
-import {MapPin} from "lucide-react";
 export const ContactHeader = () => {
   return (
       <div className="flex justify-between items-center">
@@ -10,7 +9,6 @@ export const ContactHeader = () => {
             <p className="text-sm text-gray-500">Manage your list of connections</p>
           </div>
         </div>
-
         <AddContactDialog />
       </div>
   )
