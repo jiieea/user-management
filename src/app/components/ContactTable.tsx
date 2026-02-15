@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, {useMemo} from 'react'
 import {Mail, Phone} from 'lucide-react';
 import {Contact} from '../types/interfaces';
 import {useRouter} from "next/navigation";
@@ -14,11 +14,20 @@ export const ContactTable: React.FC<ContactTableProps> = (
     }
 ) => {
     const router = useRouter();
+    const sortedContacts = useMemo(() => {
+        if (!contacts) return [];
+        return [...contacts].sort((a, b) => {
+            // @ts-ignore
+            return b.id - a.id;
+        })
+    }, [contacts]);
     return (
         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm">
             <div className="p-6 border-b border-gray-50 flex justify-between items-center">
                 <h2 className="font-bold text-gray-800 text-lg">Recently Added Contacts</h2>
-                <button className="text-primary text-sm font-semibold hover:underline" onClick={() => router.push('/contacts')}>View All</button>
+                <button className="text-primary text-sm font-semibold hover:underline"
+                        onClick={() => router.push('/contacts')}>View All
+                </button>
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -32,16 +41,16 @@ export const ContactTable: React.FC<ContactTableProps> = (
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                     {
-                        contacts?.length === 0 ? (
+                        sortedContacts?.length === 0 ? (
                             <div>
                                 No Contact added
                             </div>
                         ) : (
                             <>
-                                {contacts!.map((contact) => (
+                                {sortedContacts.map((contact) => (
                                     <tr key={contact.id} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-3"  onClick={() => router.push(`/address/${contact.id}`)}>
                                                 <div
                                                     className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
                                                     {
@@ -50,8 +59,7 @@ export const ContactTable: React.FC<ContactTableProps> = (
                                                 </div>
                                                 <div>
                                                     <p className="font-semibold text-gray-800 cursor-pointer"
-                                                       onClick={() => router.push(`/address/${contact.id}`)}
-                                                    >{contact.first_name}</p>
+                                                    >{contact.first_name} {contact.last_name}</p>
                                                     <p className="text-xs text-gray-500">Software Engineer</p>
                                                 </div>
                                             </div>

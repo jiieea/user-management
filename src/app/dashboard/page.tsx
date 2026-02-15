@@ -6,6 +6,7 @@ import { ContactTable } from '../components/ContactTable';
 import { AddContactDialog } from '../components/AddContactDialog';
 export default async function DashboardPage() {
     const contacts = await getContact();
+
     // i wanna call the action here
     return (
         <div className="space-y-8">

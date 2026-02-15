@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { Address } from "@/app/types/interfaces";
 
-// 1. Corrected the Promise return type nesting
 export const getAddressById = async (contactId: string): Promise<Address[] | null> => {
     const cookiesStore = await cookies();
     const token = cookiesStore.get('token')?.value;

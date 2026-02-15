@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Container } from "./components/Container";
 import { getUser } from "./action/getUser";
+import SearchProvider from "@/provider/SearchProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +34,9 @@ export default async function RootLayout({
     <Container
       user={user!}
     >
-      { children }
+      <SearchProvider>
+        { children }
+      </SearchProvider>
     </Container>
       <Toaster position={'top-center'} richColors={true}/>
       </body>

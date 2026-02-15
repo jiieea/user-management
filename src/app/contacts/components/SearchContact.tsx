@@ -1,6 +1,12 @@
-import React from 'react'
+"use client"
+import React, {useEffect} from 'react'
+import useDebounce from "@/app/hook/useDebounce";
+import {useSearchContext} from "@/provider/SearchProvider";
 
 const SearchContact = () => {
+    const { searchValue , setSearchValue } = useSearchContext();
+    const debounceValue = useDebounce<string>(searchValue, 500);
+
     return (
         <div>
             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex gap-4">
