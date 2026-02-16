@@ -1,5 +1,5 @@
 "use client"
-import {AddContact} from "@/app/components/ContactForm";
+import {EditContact} from "@/app/components/ContactForm";
 import DeleteContactButton from "@/app/contacts/components/DeleteContactButton";
 import {AddAddressModal} from "@/app/contacts/components/AddAddressModal";
 import React from "react";
@@ -41,7 +41,7 @@ export const ContactTable: React.FC<ContactTableProps> = (
                                 <td className="px-6 py-4 text-gray-600 text-sm">{contact.email}</td>
                                 <td className="px-6 py-4 text-gray-600 text-sm">{contact.phone}</td>
                                 <td className="px-6 py-4 text-right">
-                                    <AddContact contact={contact} />
+                                    <EditContact contact={contact} />
                                     <DeleteContactButton id={contact.id} />
                                 </td>
                                 <td>

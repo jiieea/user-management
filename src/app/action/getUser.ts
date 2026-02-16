@@ -11,7 +11,7 @@ export const getUser = async (): Promise<User | null> => {
     }
 
     try {
-        const response = await fetch(process.env.NEXT_PUBLIC_GET_USER_API!, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API!}/current`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

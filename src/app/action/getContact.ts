@@ -7,7 +7,7 @@ export const getContact = async() : Promise<Contact[] | null> => {
     const token = cookieStore.get('token')?.value;
 
     try {
-        const response = await fetch(process.env.NEXT_PUBLIC_GET_CONTACT_API!, {
+        const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_API!, {
             method: 'GET',
             headers: {
                 'Content-Type' : 'application/json',

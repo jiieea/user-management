@@ -24,7 +24,7 @@ const DeleteContactButton: React.FC<DeleteContactProps> = ({id}) => {
     const handleDeleteContact = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_DELETE_CONTACT_API}/${id}` ,{
+            const response = await fetch(`${process.env.NEXT_PUBLIC_CONTACT_API}/${id}` ,{
                 method: 'DELETE',
                 headers : {
                     'Content-Type': 'application/json',

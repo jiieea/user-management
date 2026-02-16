@@ -7,7 +7,7 @@ const searchContactsByName = async (name: string): Promise<Contact[] | null> => 
     const token = cookiesStore.get('token')?.value;
 
     try {
-        const url = new URL(process.env.NEXT_PUBLIC_SEARCH_CONTACT_API!);
+        const url = new URL(process.env.NEXT_PUBLIC_CONTACT_API!);
         if (!name) {
             return await getContact();
         }

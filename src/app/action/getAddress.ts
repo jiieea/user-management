@@ -12,7 +12,7 @@ export const getAddressById = async (contactId: string): Promise<Address[] | nul
     }
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_GET_ADDRESS_API}/${contactId}/addresses`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API}/${contactId}/addresses`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,7 +27,6 @@ export const getAddressById = async (contactId: string): Promise<Address[] | nul
 
         const result = await response.json();
 
-        // 2. Fixed the logic: check if data exists and isn't empty
         if (!result.data || result.data.length === 0) {
             return []; // Returning an empty array is usually safer than null for lists
         }

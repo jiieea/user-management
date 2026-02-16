@@ -18,8 +18,8 @@ const LoginForm = () => {
     const handleUserLogin: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
         try {
-            const api = process.env.NEXT_PUBLIC_LOGIN_USER_API!;
-            const response = await fetch(api, {
+            const api = process.env.NEXT_PUBLIC_USER_API!;
+            const response = await fetch(`${api}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"

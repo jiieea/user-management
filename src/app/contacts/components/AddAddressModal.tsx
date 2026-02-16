@@ -49,7 +49,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = (
         setIsLoading(true);
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_CREATE_ADDRESS_API!}/${contact.id}/addresses`, {
+                `${process.env.NEXT_PUBLIC_ADDRESS_API!}/${contact.id}/addresses`, {
                     method: "POST",
                     body: JSON.stringify(data),
                     headers: {

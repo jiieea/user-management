@@ -37,7 +37,7 @@ export const AddContactDialog = () => {
     const handleAddContact: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
         try {
-            const response = await fetch(process.env.NEXT_PUBLIC_UPLOAD_CONTACT_API!, {
+            const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_API!, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

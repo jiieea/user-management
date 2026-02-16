@@ -19,9 +19,11 @@ import {ContactModalForm} from "@/app/types/interfaces";
 import {toast} from "sonner";
 import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
-export const AddContact: React.FC<ContactModalForm> = ({
-                                                           contact
-                                                       }) => {
+
+export const EditContact: React.FC<ContactModalForm> = (
+    {
+        contact
+    }) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const router = useRouter();
     const token = Cookies.get("token");
@@ -44,11 +46,11 @@ export const AddContact: React.FC<ContactModalForm> = ({
     const handleUpdateContact: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_UPDATE_CONTACT_API}/${contact?.id}` , {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_CONTACT_API}/${contact?.id}`, {
                 method: "PUT",
-                headers : {
+                headers: {
                     "Content-Type": "application/json",
-                    'Authorization' :token!
+                    'Authorization': token!
                 },
                 body: JSON.stringify(values)
             })
@@ -64,8 +66,8 @@ export const AddContact: React.FC<ContactModalForm> = ({
             reset();
             router.refresh();
             toast.success("Contact successfully updated");
-        }catch (e) {
-            if(e instanceof  Error) {
+        } catch (e) {
+            if (e instanceof Error) {
                 toast.error(e.message)
             }
         }
@@ -79,7 +81,7 @@ export const AddContact: React.FC<ContactModalForm> = ({
                 <DialogContent className="sm:max-w-sm">
                     <form onSubmit={handleSubmit(handleUpdateContact)}>
                         <DialogHeader>
-                            <DialogTitle>Add New Contact</DialogTitle>
+                            <DialogTitle>Edit Contact</DialogTitle>
                         </DialogHeader>
                         <FieldGroup>
                             <Field>
@@ -114,7 +116,7 @@ export const AddContact: React.FC<ContactModalForm> = ({
                                 <Button type="button" variant="outline">Cancel</Button>
                             </DialogClose>
                             <Button type='submit' disabled={isLoading}>
-                                {isLoading ? <Spinner className='size-3'/> : "Add Contact"}
+                                {isLoading ? <Spinner className='size-3'/> : "Save"}
                             </Button>
                         </DialogFooter>
                     </form>

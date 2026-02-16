@@ -20,7 +20,7 @@ const CreateUserForm = () => {
   const createUser: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     try {
-      const api = process.env.NEXT_PUBLIC_CREATE_API!;
+      const api = process.env.NEXT_PUBLIC_USER_API!;
 
       const response = await fetch(api, {
         method: "POST",
