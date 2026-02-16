@@ -1,16 +1,19 @@
-import { getContact } from "../action/getContact";
-import { ContactHeader } from "./components/ContactHeader";
-import SearchContact from "./components/SearchContact";
-import React from "react";
+import {ContactHeader} from "@/app/contacts/components/ContactHeader";
 import {ContactTable} from "@/app/contacts/components/ContactTable";
-export default async function ContactsPage() {
-  const contacts =  await getContact();
-  return (
-    <div className="space-y-6">
-      <ContactHeader />
-    <SearchContact />
-      {/* Contacts Table */}
-     <ContactTable contacts={contacts!}/>
-    </div>
-  );
+import SearchContact from "@/app/contacts/components/SearchContact";
+import searchContactsByName from "@/app/action/searchContactsByName";
+interface PageProps {
+   searchParams : Promise<{ query : string}>
+}
+
+export default async function ContactsPage({ searchParams }: PageProps) {
+    const { query } = await searchParams;
+    const contacts = await searchContactsByName(query);
+    return (
+        <div className="space-y-6">
+            <ContactHeader />
+            <SearchContact />
+            <ContactTable contacts={contacts!} />
+        </div>
+    );
 }

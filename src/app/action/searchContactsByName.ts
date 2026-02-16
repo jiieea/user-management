@@ -1,18 +1,19 @@
 import {cookies} from "next/headers";
 import {Contact} from "@/app/types/interfaces";
+import {getContact} from "@/app/action/getContact";
 
-const searchContacts = async (query: string = ""): Promise<Contact[] | null> => {
+const searchContactsByName = async (name: string): Promise<Contact[] | null> => {
     const cookiesStore = await cookies();
     const token = cookiesStore.get('token')?.value;
 
     try {
         const url = new URL(process.env.NEXT_PUBLIC_SEARCH_CONTACT_API!);
-        if(query) {
-            url.searchParams.append('name', query);
-            url.searchParams.append('email', query);
-            url.searchParams.append('phone', query);
+        if (!name) {
+            return await getContact();
         }
-        const response = await fetch( url.toString(), {
+
+        url.searchParams.set('email', name);
+        const response = await fetch(url.toString(), {
             method: 'GET',
             headers: {
                 'Authorization': token!,
@@ -22,15 +23,15 @@ const searchContacts = async (query: string = ""): Promise<Contact[] | null> => 
         })
 
         const result = await response.json();
-        if (result.data.length < 0) {
-            return null;
+        if (!result.data || result.data.length === 0) {
+            return [];
         }
 
         return result.data as Contact[];
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         return [];
     }
 }
 
-export default searchContacts;
+export default searchContactsByName;
