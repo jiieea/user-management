@@ -47,10 +47,11 @@ export const ContactTable: React.FC<ContactTableProps> = (
                             </div>
                         ) : (
                             <>
-                                {sortedContacts.map((contact) => (
+                                {sortedContacts.slice(0, 3).map((contact) => (
                                     <tr key={contact.id} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3"  onClick={() => router.push(`/address/${contact.id}`)}>
+                                            <div className="flex items-center gap-3"
+                                                 onClick={() => router.push(`/address/${contact.id}`)}>
                                                 <div
                                                     className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
                                                     {
