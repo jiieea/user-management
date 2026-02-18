@@ -3,6 +3,7 @@ import {ContactTable} from "@/app/contacts/components/ContactTable";
 import SearchContact from "@/app/contacts/components/SearchContact";
 import searchContacts from "@/app/action/searchContacts";
 
+
 interface PageProps {
    searchParams : Promise<{ query : string}>
 }

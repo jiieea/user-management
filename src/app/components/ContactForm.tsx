@@ -27,7 +27,6 @@ export const EditContact: React.FC<ContactModalForm> = (
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const router = useRouter();
     const token = Cookies.get("token");
-
     const {
         handleSubmit,
         reset,
@@ -81,9 +80,9 @@ export const EditContact: React.FC<ContactModalForm> = (
                 <DialogContent className="sm:max-w-sm">
                     <form onSubmit={handleSubmit(handleUpdateContact)}>
                         <DialogHeader>
-                            <DialogTitle>Edit Contact</DialogTitle>
+                            <DialogTitle className="text-xl">Edit Contact</DialogTitle>
                         </DialogHeader>
-                        <FieldGroup>
+                        <FieldGroup className="mt-2">
                             <Field>
                                 <Label htmlFor="firstname">Firstname</Label>
                                 <Input

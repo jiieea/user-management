@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface User {
     username?: string,
     name?: string
@@ -12,6 +14,7 @@ export interface Contact {
 }
 
 export interface Address {
+    id: number,
     street?: string,
     city?: string,
     province?: string,
@@ -27,5 +30,18 @@ export interface DeleteContactProps {
 export interface ContactModalForm {
     contact?: Contact,
     isEdit?: boolean,
+}
+
+export interface ModalContainerProps {
+    children: React.ReactNode;
+    title: string;
+    isOpen: boolean;
+    onChange: (open: boolean) => void;
+}
+
+export interface ModalProps {
+    isOpen : boolean,
+    onOpen: () => void,
+    onClose: () => void,
 }
 

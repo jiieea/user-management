@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { Address } from "@/app/types/interfaces";
 
-export const getAddressById = async (contactId: string): Promise<Address[] | null> => {
+export const getAddressByContactId = async (contactId: string): Promise<Address[] | null> => {
     const cookiesStore = await cookies();
     const token = cookiesStore.get('token')?.value;
 
