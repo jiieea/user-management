@@ -3,7 +3,8 @@
 import {Address} from "@/app/types/interfaces";
 import {AddressCard} from "@/app/components/AddressTable";
 import EditAddressModal from "@/app/components/EditAddressModal";
-import {useState} from "react";
+import React, {useState} from "react";
+import {DeleteAddressModal} from "@/app/components/DeleteAddressModal";
 
 interface Props {
     addresses: Address[];
@@ -16,6 +17,7 @@ const AddressesClient: React.FC<Props> = ({
                                           }) => {
     const [selectedAddress, setSelectedAddress] =
         useState<Address | null>(null);
+    const [ deleteAddress , setDeleteAddress ] = useState<Address | null>(null);
 
     return (
         <>
@@ -24,11 +26,20 @@ const AddressesClient: React.FC<Props> = ({
                     <AddressCard
                         key={address.id}
                         address={address}
+                        contactId={contactId}
+                        onDelete={() => setDeleteAddress(address)}
                         onEdit={() => setSelectedAddress(address)}
                     />
                 ))}
             </div>
-
+            {deleteAddress && (
+                <DeleteAddressModal
+                    address={deleteAddress}
+                    contactId={contactId}
+                    isOpen={!!deleteAddress}
+                    onClose={() => setDeleteAddress(null)}
+                />
+            )}
             {selectedAddress && (
                 <EditAddressModal
                     address={selectedAddress}
@@ -37,6 +48,8 @@ const AddressesClient: React.FC<Props> = ({
                     onClose={() => setSelectedAddress(null)}
                 />
             )}
+
+
         </>
     );
 };

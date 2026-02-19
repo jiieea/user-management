@@ -2,6 +2,9 @@ import {getAddressByContactId} from "@/app/action/getAddress";
 import {Address} from "@/app/types/interfaces";
 import {Mail} from "lucide-react";
 import AddressesClient from "@/app/components/AddressClient";
+import React from "react";
+
+
 
 interface PageProps {
     params: Promise<{ id: string }>;
