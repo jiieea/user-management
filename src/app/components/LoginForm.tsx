@@ -18,8 +18,7 @@ const LoginForm = () => {
     const handleUserLogin: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
         try {
-            const api = process.env.NEXT_PUBLIC_USER_API!;
-            const response = await fetch(`${api}/login`, {
+            const response = await fetch(`https://nestjs-restful-api.vercel.app/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"
@@ -34,6 +33,7 @@ const LoginForm = () => {
             console.debug(result)
             if (response.status == 404 || response.status == 401) {
                 toast.error(result.errors);
+                return;
             }
 
             toast.success(`Welcome aboard ${result.data.username}`)
@@ -44,6 +44,8 @@ const LoginForm = () => {
             if (e instanceof Error) {
                 toast.error(e.message)
             }
+        }finally {
+            setIsLoading(false)
         }
     }
     return (

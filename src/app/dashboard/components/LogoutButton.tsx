@@ -9,7 +9,7 @@ export const LogoutButton = () => {
     const token = Cookies.get('token')
     const handleLogoutButton = async () => {
         try{
-            const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API!}/current`, {
+            const response = await fetch(`https://nestjs-restful-api.vercel.app/api/users/current`, {
                 method: "DELETE",
                 headers: {
                     'Content-Type' : 'application/json',

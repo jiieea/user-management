@@ -20,9 +20,7 @@ const CreateUserForm = () => {
   const createUser: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     try {
-      const api = process.env.NEXT_PUBLIC_USER_API!;
-
-      const response = await fetch(api, {
+      const response = await fetch(process.env.NEXT_PUBLIC_USER_API!, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,6 +43,7 @@ const CreateUserForm = () => {
       router.push('/login');
     } catch (e: unknown) {
       toast.error("Network error: Could not reach the server." + e);
+      return;
     } finally {
       setIsLoading(false);
     }
