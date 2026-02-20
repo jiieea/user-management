@@ -1,10 +1,11 @@
 "use client"
 import {EditContact} from "@/app/components/ContactForm";
 import DeleteContactButton from "@/app/contacts/components/DeleteContactButton";
-import {AddAddressModal} from "@/app/contacts/components/AddAddressModal";
 import React from "react";
-import {Contact} from "@/app/types/interfaces";
+import {Address, Contact} from "@/app/types/interfaces";
 import {useRouter} from "next/navigation";
+import {CiCirclePlus} from "react-icons/ci";
+import {AddModal} from "@/app/components/AddAddressModal";
 
 interface ContactTableProps {
     contacts: Contact[];
@@ -16,7 +17,7 @@ export const ContactTable: React.FC<ContactTableProps> = (
     }
 ) => {
     const router = useRouter();
-
+    const [address, setAddress] = React.useState<Address | null>(null)
     return (
         <>
             <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
@@ -34,19 +35,31 @@ export const ContactTable: React.FC<ContactTableProps> = (
                         contacts!.map((contact) => (
                             <tr key={contact.id} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4">
-                                    <div className="font-medium text-gray-900" onClick={() =>router.push(`/address/${contact.id}`)}>
+                                    <div className="font-medium text-gray-900"
+                                         onClick={() => router.push(`/address/${contact.id}`)}>
                                         {contact.first_name} {contact.last_name}
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 text-gray-600 text-sm">{contact.email}</td>
                                 <td className="px-6 py-4 text-gray-600 text-sm">{contact.phone}</td>
                                 <td className="px-6 py-4 text-right">
-                                    <EditContact contact={contact} />
-                                    <DeleteContactButton id={contact.id} />
+                                    <EditContact contact={contact}/>
+                                    <DeleteContactButton id={contact.id}/>
                                 </td>
                                 <td>
-                                    <AddAddressModal contact={contact} />
+                                    <CiCirclePlus className="text-xl cursor-pointer"
+                                                  onClick={() => setAddress(address)}/>
                                 </td>
+                                {
+                                    address && (
+                                        <AddModal
+                                            contactId={Number(contact.id)}
+                                            address={address}
+                                            isOpen={!!address}
+                                            onClose={() => setAddress(null)}
+                                        />
+                                    )
+                                }
                             </tr>
                         ))
                     ) : (
@@ -59,6 +72,7 @@ export const ContactTable: React.FC<ContactTableProps> = (
                     </tbody>
                 </table>
             </div>
+
         </>
     );
 };

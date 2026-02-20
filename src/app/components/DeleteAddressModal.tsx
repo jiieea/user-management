@@ -2,7 +2,6 @@
 import {Address} from "@/app/types/interfaces";
 import React, {useState} from "react";
 import {toast} from "sonner";
-import {router} from "next/client";
 import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
 
@@ -19,11 +18,11 @@ export function DeleteAddressModal({
                                        onClose,
                                        contactId
                                    }: DeleteAddressModalProps) {
-    const [ isLoading , setIsLoading ] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const token = Cookies.get('token');
 
-    if(!isOpen) return null;
+    if (!isOpen) return null;
     const handleDeleteAddress = async () => {
         setIsLoading(true);
         try {
