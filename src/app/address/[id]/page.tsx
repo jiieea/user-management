@@ -1,32 +1,22 @@
 import {getAddressByContactId} from "@/app/action/getAddress";
-import {Address} from "@/app/types/interfaces";
 import {Mail} from "lucide-react";
 import AddressesClient from "@/app/components/AddressClient";
 import React from "react";
-
-
+import {AddressHeader} from "@/app/contacts/components/AddressHeader";
 
 interface PageProps {
     params: Promise<{ id: string }>;
 }
-
 const AddressesPage: React.FC<PageProps> = async ({params}) => {
     const {id} = await params;
-    const addresses: Address[] | null = await getAddressByContactId(id);
-
+    const addresses  = await getAddressByContactId(id);
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-6xl mx-auto">
-                <header className="flex justify-between items-end border-b pb-6 mb-8">
-                    <div>
-                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-                            Addresses Directory
-                        </h1>
-                        <p className="text-gray-500 mt-1">
-                            Showing {addresses?.length || 0} registered locations
-                        </p>
-                    </div>
-                </header>
+                    <AddressHeader
+                    address={addresses}
+                    contactId={Number(id)}
+                    />
 
                 {addresses && addresses.length > 0 ? (
                     <AddressesClient

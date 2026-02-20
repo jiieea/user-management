@@ -17,7 +17,7 @@ const AddressesClient: React.FC<Props> = ({
                                           }) => {
     const [selectedAddress, setSelectedAddress] =
         useState<Address | null>(null);
-    const [ deleteAddress , setDeleteAddress ] = useState<Address | null>(null);
+    const [deleteAddress, setDeleteAddress] = useState<Address | null>(null);
 
     return (
         <>
@@ -48,8 +48,6 @@ const AddressesClient: React.FC<Props> = ({
                     onClose={() => setSelectedAddress(null)}
                 />
             )}
-
-
         </>
     );
 };

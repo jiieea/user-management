@@ -18,7 +18,6 @@ export const getAddressByContactId = async (contactId: string): Promise<Address[
                 'Content-Type': 'application/json',
                 'Authorization': token!,
             },
-            cache: 'no-cache',
         });
 
         if (!response.ok) {

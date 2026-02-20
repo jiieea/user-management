@@ -31,13 +31,11 @@ const EditAddressModal: React.FC<EditAddressModalProps> = ({
                                                                isOpen,
                                                                onClose,
                                                            }) => {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const token = Cookies.get("token");
-
+    const router = useRouter();
     const {reset, handleSubmit, register} = useForm<FieldValues>();
 
-    // IMPORTANT: reset setiap address berubah
     useEffect(() => {
         reset({
             street: address.street || "",
@@ -66,15 +64,13 @@ const EditAddressModal: React.FC<EditAddressModalProps> = ({
                 );
 
                 const result = await response.json();
-
                 if (!response.ok) {
                     toast.error(result.errors || "Update failed");
                     return;
                 }
-
+                router.refresh()
                 toast.success("Address updated successfully");
                 onClose();
-                router.refresh();
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     toast.error(error.message);
