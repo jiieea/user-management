@@ -38,7 +38,7 @@ export default async function RootLayout({
         { children }
       </SearchProvider>
     </Container>
-      <Toaster position={'top-center'} richColors={true}/>
+      <Toaster position="top-center" richColors={true}/>
       </body>
     </html>
   );

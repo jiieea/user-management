@@ -6,15 +6,19 @@ import {Contact} from "@/app/types/interfaces";
 import {useRouter} from "next/navigation";
 import {CiCirclePlus} from "react-icons/ci";
 import {AddModal} from "@/app/components/AddAddressModal";
+import {EditContactModal} from "@/app/components/EditContactModal";
 
 interface ContactTableProps {
     contacts: Contact[];
 }
 
-export const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
+export const ContactTable: React.FC<ContactTableProps> = ({contacts}) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = React.useState(false);
     const [selectedContactId, setSelectedContactId] = React.useState<number | null>(null);
+    const [isEditOpen, setIsEditOpen] = React.useState(false);
+    const [selectedContact, setSelectedContact] = React.useState<Contact | null>(null);
+
     const openModal = (contactId: number) => {
         setSelectedContactId(contactId);
         setIsOpen(true);
@@ -23,6 +27,16 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
     const closeModal = () => {
         setIsOpen(false);
         setSelectedContactId(null);
+    };
+
+    const openEditModal = (contact: Contact) => {
+        setSelectedContact(contact);
+        setIsEditOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditOpen(false);
+        setSelectedContact(null);
     };
 
     return (
@@ -56,8 +70,11 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
                                 <td className="px-6 py-4 text-gray-600 text-sm">{contact.phone}</td>
 
                                 <td className="px-6 py-4 text-right">
-                                    <button className="text-primary hover:underline text-sm font-medium mr-4">Edit</button>
-                                    {/*<EditContact contact={contact}/>*/}
+                                    <button
+                                        onClick={() => openEditModal(contact)}
+                                        className="text-primary hover:underline text-sm font-medium mr-4"
+                                    >Edit
+                                    </button>
                                     <DeleteContactButton id={contact.id}/>
                                 </td>
 
@@ -79,11 +96,6 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
                     </tbody>
                 </table>
             </div>
-
-            {
-
-            }
-
             {isOpen && selectedContactId && (
                 <AddModal
                     contactId={selectedContactId}
@@ -91,6 +103,16 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
                     onClose={closeModal}
                 />
             )}
+
+            {
+                isEditOpen && selectedContact &&(
+                    <EditContactModal
+                        isOpen={isEditOpen}
+                        contact={ selectedContact }
+                        onClose={closeEditModal}
+                    />
+                )
+            }
         </>
     );
 };
