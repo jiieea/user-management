@@ -1,34 +1,35 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, {useCallback} from 'react'
 import Cookies from "js-cookie";
 import {toast} from "sonner";
+
+
+
+import {logoutService} from "@/app/action/LogoutService";
 export const LogoutButton = () => {
     const router = useRouter();
-    const token = Cookies.get('token')
-    const handleLogoutButton = async () => {
-        try{
-            const response = await fetch(`https://nestjs-restful-api.vercel.app/api/users/current`, {
-                method: "DELETE",
-                headers: {
-                    'Content-Type' : 'application/json',
-                    "Authorization": token!,
-                },
-            })
-            toast.success('Logout Successfully');
-            Cookies.remove('token');
-            const result = await response.json();
-            console.debug(result);
+    const handleLogout = useCallback(async () => {
+        const token = Cookies.get('token');
+        if(!token) {
+            toast.error('Token Not Found');
             router.push('/login');
-            router.refresh()
-        }catch(e: unknown){
-            if ( e instanceof Error) {
-                toast.error('failed to logout')
+            return;
+        }
+        try {
+            await logoutService(token);
+
+            Cookies.remove('token');
+            toast.success('Logout successfully');
+            router.replace('/login');
+        }catch (error : unknown) {
+            if(error instanceof  Error) {
+                toast.error(error.message);
             }
         }
-    }
+    },[router]);
   return (
-    <Button onClick={handleLogoutButton} className="cursor-pointer hover:bg-secondary" variant="ghost">Logout</Button>
+    <Button onClick={handleLogout} className="cursor-pointer hover:bg-secondary" variant="ghost">Logout</Button>
   )
 }

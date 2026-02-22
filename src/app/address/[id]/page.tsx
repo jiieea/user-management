@@ -12,7 +12,7 @@ const AddressesPage: React.FC<PageProps> = async ({params}) => {
     const addresses  = await getAddressByContactId(id);
     return (
         <div className="min-h-screen bg-gray-50 p-8">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl mx-auto space-y-6">
                     <AddressHeader
                     address={addresses}
                     contactId={Number(id)}

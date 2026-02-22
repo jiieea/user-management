@@ -99,18 +99,22 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
                             <Input
                                 placeholder="last name"
                                 id="lastname"
+                                className="text-primary"
                                 {...register('last_name')}
                             />
                         </Field>
                         <Field>
                             <Label htmlFor="email" className="text-primary font-semibold">email</Label>
-                            <Input id="email" placeholder='test@example.com'
+                            <Input
+                                className="text-primary"
+                                id="email" placeholder='test@example.com'
                                    {...register('email')}
                             />
                         </Field>
                         <Field>
                             <Label htmlFor="phone" className="text-primary font-semibold">phone</Label>
                             <Input id="phone"
+                                   className="text-primary"
                                    {...register('phone')}
                             />
                         </Field>

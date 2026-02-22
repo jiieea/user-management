@@ -5,7 +5,7 @@ import {AddContactDialog} from '@/app/components/AddContactDialog'
 import React from 'react'
 import {Button} from "@/components/ui/button";
 
-export const ContactHeader = () => {
+export const DashBoardHeader = () => {
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleOpen = () => {
@@ -17,7 +17,8 @@ export const ContactHeader = () => {
     }
     return (
         <>
-            <Header title="Contacts" desc="Manage Your Relations">
+            <Header title="Contacts" desc="Welcome back!
+        Here’s what’s happening with your network.">
                 <Button onClick={handleOpen}>
                     Add New Contact
                 </Button>
