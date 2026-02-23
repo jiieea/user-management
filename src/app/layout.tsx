@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Container } from "./components/Container";
-import { getUser } from "./action/getUser";
 import SearchProvider from "@/provider/SearchProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,14 +24,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getUser();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
     <Container
-      user={user!}
     >
       <SearchProvider>
         { children }

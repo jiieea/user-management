@@ -7,6 +7,7 @@ import {useRouter} from "next/navigation";
 import {CiCirclePlus} from "react-icons/ci";
 import {AddModal} from "@/app/components/AddAddressModal";
 import {EditContactModal} from "@/app/components/EditContactModal";
+import {useAuth} from "@/app/hook/useAuth";
 
 interface ContactTableProps {
     contacts: Contact[];

@@ -3,11 +3,11 @@ import React from "react";
 interface HeaderProps {
     title: string,
     desc: string,
-    children : React.ReactNode
+    children: React.ReactNode
 }
 
 export const Header = ({
-                           title, desc , children
+                           title, desc, children
                        }: HeaderProps) => {
     return (
         <>
@@ -18,7 +18,7 @@ export const Header = ({
                         <p className="text-gray-500">{desc}</p>
                     </div>
                 </div>
-                { children }
+                {children}
             </div>
         </>
     );

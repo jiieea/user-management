@@ -4,49 +4,24 @@ import React, {useState} from 'react'
 import Cookies from "js-cookie";
 import {useForm, SubmitHandler, FieldValues} from 'react-hook-form'
 import {toast} from "sonner";
+import {useAuth} from "@/app/hook/useAuth";
+import {LoginPayload} from "@/app/types/interfaces";
 
 const LoginForm = () => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { loginService  } = useAuth();
+    const [ isLoading, setIsLoading ] = useState(false);
     const router = useRouter()
-    const {reset, handleSubmit, register} = useForm<FieldValues>({
+    const {reset, handleSubmit, register} = useForm<LoginPayload>({
         defaultValues: {
             username: "",
             password: "",
         }
     })
 
-    const handleUserLogin: SubmitHandler<FieldValues> = async (values) => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(`https://nestjs-restful-api.vercel.app/api/users/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': "application/json"
-                },
-                body: JSON.stringify(values)
-            })
-            const result = await response.json();
-            // store the token once user login is success
-            if (response.ok) {
-                Cookies.set('token', result.data.token, {expires: 7});
-            }
-            console.debug(result)
-            if (response.status == 404 || response.status == 401) {
-                toast.error(result.errors);
-                return;
-            }
-
-            toast.success(`Welcome aboard ${result.data.username}`)
-            router.push('/dashboard')
-            reset();
-            setIsLoading(false);
-        } catch (e: unknown) {
-            if (e instanceof Error) {
-                toast.error(e.message)
-            }
-        }finally {
-            setIsLoading(false)
-        }
+    const handleUserLogin: SubmitHandler<LoginPayload> = async (values) => {
+      await loginService(values);
+      router.replace('/dashboard');
+      reset()
     }
     return (
         <div className="min-h-screen flex items-center justify-center px-4">

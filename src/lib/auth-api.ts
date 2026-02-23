@@ -1,8 +1,4 @@
-export type LoginPayload = {
-    username: string,
-    password: string,
-}
-
+import {LoginPayload} from "@/app/types/interfaces";
 
 export const loginRequest = async (payload: LoginPayload) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_USER_API}/login`, {
@@ -21,20 +17,19 @@ export const loginRequest = async (payload: LoginPayload) => {
 }
 
 
-export const getMeRequest = async () => {
+export const getMeRequest = async (token : string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_USER_API}/current`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            "Authorization" : token,
         }
     });
     const json = await res.json();
     if (!res.ok) {
         throw new Error('Unauthorized');
     }
-
     return json.data;
-
 }
 
 
