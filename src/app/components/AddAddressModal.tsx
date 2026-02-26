@@ -1,6 +1,5 @@
 "use client"
 import {UpdateModalContainer} from "@/app/components/UpdateModalContainer";
-import {Address} from "@/app/types/interfaces";
 import React, {useEffect, useState} from "react";
 import {DialogFooter} from "@/components/ui/dialog";
 import {Field, FieldGroup} from "@/components/ui/field";
@@ -14,7 +13,6 @@ import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 
 interface AddModalProps {
-    address: Address;
     isOpen: boolean;
     contactId: number;
     onClose: () => void;
@@ -23,7 +21,6 @@ interface AddModalProps {
 
 export const AddModal: React.FC<AddModalProps> = (
     {
-        address,
         contactId,
         isOpen,
         onClose,
@@ -39,14 +36,14 @@ export const AddModal: React.FC<AddModalProps> = (
     useEffect(() => {
         reset(
             {
-                street: address.street || "",
-                city: address.city || "",
-                province: address.province || "",
-                country: address.country,
-                postal_code: address.postal_code,
+                street:  "",
+                city: "",
+                province: "",
+                country:"" ,
+                postal_code: "",
             }
         )
-    }, [reset, address]);
+    }, [reset]);
 
     const handleAddAddress: SubmitHandler<FieldValues> = async (values) => {
         setIsLoading(true);
@@ -68,11 +65,12 @@ export const AddModal: React.FC<AddModalProps> = (
             toast.success("Address added successfully");
         } catch (error: unknown) {
             if (error instanceof Error) {
+                console.log(error.message)
                 toast.error(error.message);
             }
         } finally {
             setIsLoading(false);
-            toast.error("Failed to add address")
+            onClose();
         }
     }
     return (
@@ -129,7 +127,7 @@ export const AddModal: React.FC<AddModalProps> = (
                         </Button>
 
                         <Button type="submit" disabled={isLoading} className="cursor-pointer">
-                            {isLoading ? <Spinner className="size-3"/> : "Save Changes"}
+                            {isLoading ? <Spinner className="size-3"/> : "Add Address"}
                         </Button>
                     </DialogFooter>
                 </form>

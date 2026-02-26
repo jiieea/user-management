@@ -3,20 +3,20 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import HeaderWrapper from './HeaderWrapper';
-import { User } from '../types/interfaces';
+import {useAuth} from "@/app/hook/useAuth";
 
 const PUBLIC_PATHS = ['/login', '/signup'];
 
 interface ContainerProps {
     children: React.ReactNode;
-    user: User | null;
 }
 
-export const Container: React.FC<ContainerProps> = ({ children, user }) => {
+export const Container: React.FC<ContainerProps> = ({ children }) => {
     const pathname = usePathname();
     const isPublicPath = PUBLIC_PATHS.includes(pathname);
+    const { user } = useAuth();
 
-    // If it's a login/signup page, just render the content directly
+
     if (isPublicPath) {
         return <main className="min-h-screen bg-white">{children}</main>;
     }

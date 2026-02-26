@@ -1,23 +1,33 @@
 "use client"
 import React, {useState} from 'react'
 import {
-    DialogTrigger, Dialog
-    , DialogContent, DialogHeader,
+    DialogHeader,
     DialogTitle,
     DialogClose, DialogFooter
 } from '@/components/ui/dialog';
 import {Field, FieldGroup} from "@/components/ui/field"
 import {Label} from '@/components/ui/label';
 import {Input} from '@/components/ui/input';
-import {Plus} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {useRouter} from 'next/navigation';
 import Cookies from "js-cookie";
 import {FieldValues, useForm, SubmitHandler} from 'react-hook-form';
 import {toast} from 'sonner';
 import {Spinner} from '@/components/ui/spinner';
+import {UpdateModalContainer} from "@/app/components/UpdateModalContainer";
 
-export const AddContactDialog = () => {
+
+interface AddContactDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export const AddContactDialog: React.FC<AddContactDialogProps> = (
+    {
+        isOpen,
+        onClose,
+    }
+) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const token = Cookies.get('token');
@@ -61,62 +71,55 @@ export const AddContactDialog = () => {
             }
         } finally {
             setIsLoading(false);
+            onClose();
         }
     }
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <button
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-all">
-                    <Plus size={18}/>
-                    Add Contact
-                </button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-sm">
-                <form onSubmit={handleSubmit(handleAddContact)}>
-                    <DialogHeader>
-                        <DialogTitle>Add New Contact</DialogTitle>
-                    </DialogHeader>
-                    <FieldGroup className="mt-5">
-                        <Field>
-                            <Label htmlFor="firstname">Firstname</Label>
-                            <Input
-                                id="firstname"
-                                placeholder="First name"
-                                {...register('first_name', {required: true})}
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="lastname">Lastname</Label>
-                            <Input
-                                placeholder="last name"
-                                id="lastname"
-                                {...register('last_name', {required: true})} // Matches defaultValues
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="email">email</Label>
-                            <Input id="email" placeholder='test@example.com'
-                                   {...register('email', {required: true})}
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="phone">phone</Label>
-                            <Input id="phone"
-                                   {...register('phone', {required: true})}
-                            />
-                        </Field>
-                    </FieldGroup>
-                    <DialogFooter className="mt-4">
-                        <DialogClose asChild>
-                            <Button type="button" variant="outline">Cancel</Button>
-                        </DialogClose>
-                        <Button type='submit' disabled={isLoading}>
-                            {isLoading ? <Spinner className='size-3'/> : "Add Contact"}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+        <UpdateModalContainer
+            title="Add contact"
+            isOpen={isOpen}
+            onChange={(open) => !open && onClose()}
+        >
+            <form onSubmit={handleSubmit(handleAddContact)}>
+                <FieldGroup className="mt-5">
+                    <Field>
+                        <Label htmlFor="firstname">Firstname</Label>
+                        <Input
+                            id="firstname"
+                            placeholder="First name"
+                            {...register('first_name', {required: true})}
+                        />
+                    </Field>
+                    <Field>
+                        <Label htmlFor="lastname">Lastname</Label>
+                        <Input
+                            placeholder="last name"
+                            id="lastname"
+                            {...register('last_name', {required: true})} // Matches defaultValues
+                        />
+                    </Field>
+                    <Field>
+                        <Label htmlFor="email">email</Label>
+                        <Input id="email" placeholder='test@example.com'
+                               {...register('email', {required: true})}
+                        />
+                    </Field>
+                    <Field>
+                        <Label htmlFor="phone">phone</Label>
+                        <Input id="phone"
+                               {...register('phone', {required: true})}
+                        />
+                    </Field>
+                </FieldGroup>
+                <DialogFooter className="mt-4">
+                    <DialogClose asChild>
+                        <Button type="button" variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button type='submit' disabled={isLoading}>
+                        {isLoading ? <Spinner className='size-3'/> : "Add Contact"}
+                    </Button>
+                </DialogFooter>
+            </form>
+        </UpdateModalContainer>
     )
 }

@@ -4,9 +4,7 @@ import {Address} from "@/app/types/interfaces";
 import {Globe, MapPin, Trash2} from "lucide-react";
 import {EditButton} from "@/app/components/EditButton";
 import React from "react";
-import {toast} from "sonner";
-import Cookies from "js-cookie";
-import {useRouter} from "next/navigation";
+
 
 interface AddressCardProps {
     address: Address;

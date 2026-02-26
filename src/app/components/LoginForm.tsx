@@ -1,49 +1,36 @@
 "use client"
 import {useRouter} from 'next/navigation';
 import React, {useState} from 'react'
-import Cookies from "js-cookie";
-import {useForm, SubmitHandler, FieldValues} from 'react-hook-form'
+import {useForm, SubmitHandler} from 'react-hook-form'
 import {toast} from "sonner";
+import {useAuth} from "@/app/hook/useAuth";
+import {LoginPayload} from "@/app/types/interfaces";
 
 const LoginForm = () => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {loginService} = useAuth();
+    const [ error , setError ] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
-    const {reset, handleSubmit, register} = useForm<FieldValues>({
+    const {reset, handleSubmit, register} = useForm<LoginPayload>({
         defaultValues: {
             username: "",
             password: "",
         }
     })
 
-    const handleUserLogin: SubmitHandler<FieldValues> = async (values) => {
+    const handleUserLogin: SubmitHandler<LoginPayload> = async (values) => {
         setIsLoading(true);
         try {
-            const api = process.env.NEXT_PUBLIC_USER_API!;
-            const response = await fetch(`${api}/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': "application/json"
-                },
-                body: JSON.stringify(values)
-            })
-            const result = await response.json();
-            // store the token once user login is success
-            if (response.ok) {
-                Cookies.set('token', result.data.token, {expires: 7});
-            }
-            console.debug(result)
-            if (response.status == 404 || response.status == 401) {
-                toast.error(result.errors);
-            }
-
-            toast.success(`Welcome aboard ${result.data.username}`)
-            router.push('/dashboard')
+            await loginService(values);
+            toast.success("Login successful");
+            router.replace('/dashboard');
             reset();
-            setIsLoading(false);
-        } catch (e: unknown) {
-            if (e instanceof Error) {
-                toast.error(e.message)
+        }catch(err: unknown) {
+            if(err instanceof Error) {
+                setError(err.message);
             }
+        }finally {
+            setIsLoading(false);
         }
     }
     return (
@@ -70,6 +57,11 @@ const LoginForm = () => {
                                className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5
                            text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2
                            ring-offset-2 ring-gray-900 outline-0"/>
+                        {
+                            error && (
+                                <p className="text-[12px] font-semibold text-red-600 mt-1">{error}</p>
+                            )
+                        }
                     </div>
                     <div>
                         <a className="text-sm text-[#7747ff]" href="#">Forgot your password?

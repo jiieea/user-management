@@ -1,7 +1,20 @@
 import React from "react";
 
+
+export type LoginPayload = {
+    username: string,
+    password: string,
+}
+
+export type SignUpPayload  = {
+    username: string,
+    password: string,
+    name: string,
+}
+
 export interface User {
     username?: string,
+    password?: string,
     name?: string
 }
 
