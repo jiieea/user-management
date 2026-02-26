@@ -1,5 +1,5 @@
 "use client"
-import {EditContact} from "@/app/components/ContactForm";
+
 import DeleteContactButton from "@/app/contacts/components/DeleteContactButton";
 import React from "react";
 import {Contact} from "@/app/types/interfaces";
@@ -7,7 +7,6 @@ import {useRouter} from "next/navigation";
 import {CiCirclePlus} from "react-icons/ci";
 import {AddModal} from "@/app/components/AddAddressModal";
 import {EditContactModal} from "@/app/components/EditContactModal";
-import {useAuth} from "@/app/hook/useAuth";
 
 interface ContactTableProps {
     contacts: Contact[];

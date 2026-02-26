@@ -6,8 +6,15 @@ export type LoginPayload = {
     password: string,
 }
 
+export type SignUpPayload  = {
+    username: string,
+    password: string,
+    name: string,
+}
+
 export interface User {
     username?: string,
+    password?: string,
     name?: string
 }
 

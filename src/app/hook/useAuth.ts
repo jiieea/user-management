@@ -1,9 +1,9 @@
 "use client"
 import Cookies from "js-cookie";
 import {useCallback, useEffect, useState} from "react";
-import {LoginPayload, User} from "@/app/types/interfaces";
+import {LoginPayload, SignUpPayload, User} from "@/app/types/interfaces";
 import {useRouter} from "next/navigation";
-import {getMeRequest, loginRequest, logoutRequest} from "@/lib/auth-api";
+import {getMeRequest, loginRequest, logoutRequest, signUpRequest} from "@/lib/auth-api";
 import {toast} from "sonner";
 
 export const useAuth = () => {
@@ -13,15 +13,19 @@ export const useAuth = () => {
 
     const token = Cookies.get("token");
     const loginService = async (payload: LoginPayload) => {
-        const data = await loginRequest(payload);
+        const response = await loginRequest(payload);
 
-        Cookies.set('token', data.token, {expires: 7});
-        setUser(data)
+        Cookies.set('token', response.data.token, {expires: 7});
+        setUser(response.data);
     }
+
+    const signupService = async (payload: SignUpPayload) => {
+        return await signUpRequest(payload);
+        }
 
     const fetchMe = useCallback(async () => {
         {
-            if`` (!token) {
+            if (!token) {
                 setIsLoading(false);
                 return;
             }
@@ -40,10 +44,10 @@ export const useAuth = () => {
 
     useEffect(() => {
         fetchMe()
-    },[fetchMe])
+    }, [fetchMe])
 
     const logout = async () => {
-        if(!token) {
+        if (!token) {
             toast.error("Session Not Found");
             return;
         }
@@ -62,6 +66,7 @@ export const useAuth = () => {
         isAuthenticated: !!user,
         loginService,
         logout,
+        signupService,
         refetchUser: fetchMe,
     };
 }

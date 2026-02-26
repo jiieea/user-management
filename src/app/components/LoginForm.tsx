@@ -1,15 +1,15 @@
 "use client"
 import {useRouter} from 'next/navigation';
 import React, {useState} from 'react'
-import Cookies from "js-cookie";
-import {useForm, SubmitHandler, FieldValues} from 'react-hook-form'
+import {useForm, SubmitHandler} from 'react-hook-form'
 import {toast} from "sonner";
 import {useAuth} from "@/app/hook/useAuth";
 import {LoginPayload} from "@/app/types/interfaces";
 
 const LoginForm = () => {
-    const { loginService  } = useAuth();
-    const [ isLoading, setIsLoading ] = useState(false);
+    const {loginService} = useAuth();
+    const [ error , setError ] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
     const {reset, handleSubmit, register} = useForm<LoginPayload>({
         defaultValues: {
@@ -19,9 +19,19 @@ const LoginForm = () => {
     })
 
     const handleUserLogin: SubmitHandler<LoginPayload> = async (values) => {
-      await loginService(values);
-      router.replace('/dashboard');
-      reset()
+        setIsLoading(true);
+        try {
+            await loginService(values);
+            toast.success("Login successful");
+            router.replace('/dashboard');
+            reset();
+        }catch(err: unknown) {
+            if(err instanceof Error) {
+                setError(err.message);
+            }
+        }finally {
+            setIsLoading(false);
+        }
     }
     return (
         <div className="min-h-screen flex items-center justify-center px-4">
@@ -47,6 +57,11 @@ const LoginForm = () => {
                                className="rounded border border-gray-200 text-sm w-full font-normal leading-4.5
                            text-black tracking-[0px] appearance-none block h-11 m-0 p-2.75 focus:ring-2
                            ring-offset-2 ring-gray-900 outline-0"/>
+                        {
+                            error && (
+                                <p className="text-[12px] font-semibold text-red-600 mt-1">{error}</p>
+                            )
+                        }
                     </div>
                     <div>
                         <a className="text-sm text-[#7747ff]" href="#">Forgot your password?
