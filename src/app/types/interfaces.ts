@@ -6,6 +6,15 @@ export type LoginPayload = {
     password: string,
 }
 
+export type AddressPayload = {
+    street?: string,
+    city?: string,
+    province?: string,
+    country: string,
+    postal_code: string,
+}
+
+
 export type SignUpPayload  = {
     username: string,
     password: string,

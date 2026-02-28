@@ -2,8 +2,8 @@
 import {Address} from "@/app/types/interfaces";
 import React, {useState} from "react";
 import {toast} from "sonner";
-import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
+import {useAddress} from "@/app/hook/useAddress";
 
 interface DeleteAddressModalProps {
     address: Address,
@@ -20,29 +20,15 @@ export function DeleteAddressModal({
                                    }: DeleteAddressModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const token = Cookies.get('token');
+    const {deleteAddressService} = useAddress();
 
     if (!isOpen) return null;
     const handleDeleteAddress = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API!}/${contactId}/addresses/${address.id}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token!,
-                }
-            });
-            const result = await response.json();
-            if (!response.ok || response.status === 401) {
-                const msg = result.message;
-                toast.error(msg);
-            }
-
-            toast.success('Address has been deleted');
-            setIsLoading(false);
+            await deleteAddressService(contactId, address.id);
+            toast.success("Address deleted successfully.");
             router.refresh();
-            onClose();
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);

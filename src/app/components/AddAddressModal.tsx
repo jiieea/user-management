@@ -7,10 +7,11 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Spinner} from "@/components/ui/spinner";
-import {FieldValues, SubmitHandler, useForm} from "react-hook-form";
-import Cookies from "js-cookie";
+import { SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
+import {AddressPayload} from "@/app/types/interfaces";
+import {useAddress} from "@/app/hook/useAddress";
 
 interface AddModalProps {
     isOpen: boolean;
@@ -28,51 +29,67 @@ export const AddModal: React.FC<AddModalProps> = (
 ) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const {addAddressService} = useAddress()
     const {
         reset, register, handleSubmit
-    } = useForm<FieldValues>();
-    const token = Cookies.get('token');
+    } = useForm<AddressPayload>();
 
     useEffect(() => {
         reset(
             {
-                street:  "",
+                street: "",
                 city: "",
                 province: "",
-                country:"" ,
+                country: "",
                 postal_code: "",
             }
         )
     }, [reset]);
 
-    const handleAddAddress: SubmitHandler<FieldValues> = async (values) => {
+    const handleAddress: SubmitHandler<AddressPayload> = async (values) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API}/${contactId}/addresses`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token!
-                },
-                body: JSON.stringify(values),
-            })
-            const result = await response.json();
-            if (!response.ok || response.status === 401) {
-                const msg = result.errors || "Unauthorized";
-                toast.error(msg);
-            }
-            router.refresh();
-            toast.success("Address added successfully");
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.log(error.message)
-                toast.error(error.message);
-            }
-        } finally {
-            setIsLoading(false);
+            await addAddressService(values, contactId);
+            toast.success("Address added successfully.");
             onClose();
+            router.refresh();
+        }catch (e : unknown) {
+            if(e instanceof Error) {
+                toast.error(e.message);
+            }
+        }finally {
+            setIsLoading(false);
         }
     }
+
+    // const handleAddAddress: SubmitHandler<FieldValues> = async (values) => {
+    //     setIsLoading(true);
+    //     try {
+    //         const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API}/${contactId}/addresses`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": token!
+    //             },
+    //             body: JSON.stringify(values),
+    //         })
+    //         const result = await response.json();
+    //         if (!response.ok || response.status === 401) {
+    //             const msg = result.errors || "Unauthorized";
+    //             toast.error(msg);
+    //         }
+    //         router.refresh();
+    //         toast.success("Address added successfully");
+    //     } catch (error: unknown) {
+    //         if (error instanceof Error) {
+    //             console.log(error.message)
+    //             toast.error(error.message);
+    //         }
+    //     } finally {
+    //         setIsLoading(false);
+    //         onClose();
+    //     }
+    // }
     return (
         <>
             <UpdateModalContainer
@@ -80,7 +97,7 @@ export const AddModal: React.FC<AddModalProps> = (
                 isOpen={isOpen}
                 onChange={(open) => !open && onClose()}
             >
-                <form onSubmit={handleSubmit(handleAddAddress)}>
+                <form onSubmit={handleSubmit(handleAddress)}>
                     <FieldGroup className="mt-5">
                         <Field>
                             <Label className="text-primary font-semibold">Street</Label>
