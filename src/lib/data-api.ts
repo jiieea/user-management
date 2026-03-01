@@ -25,12 +25,12 @@ export const addAddressRequest = async (
 }
 
 
-export const deleteAddressRequest = async (addressId: number , contactId : number , token : string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API!}/${contactId}/addresses/${addressId}` , {
+export const deleteAddressRequest = async (addressId: number, contactId: number, token: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API!}/${contactId}/addresses/${addressId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            "Authorization" : token
+            "Authorization": token
         }
     });
     const result = await response.json();
@@ -41,8 +41,26 @@ export const deleteAddressRequest = async (addressId: number , contactId : numbe
     return result.data;
 }
 
-const editAddressRequest = async (addressId: string) => {
-//     ....
+export const editAddressRequest = async (
+    payload: AddressPayload,
+    addressId: number, contactId: number,
+    token: string) => {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_ADDRESS_API}/${contactId}/addresses/${addressId}
+        `, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        });
+
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.errors[0].message);
+    }
+
+    return result.data;
 }
 
 

@@ -1,7 +1,7 @@
 "use client";
 
 import {UpdateModalContainer} from "@/app/components/UpdateModalContainer";
-import {Address} from "@/app/types/interfaces";
+import {Address, AddressPayload} from "@/app/types/interfaces";
 import React, {useState, useEffect} from "react";
 import {DialogFooter} from "@/components/ui/dialog";
 import {Field, FieldGroup} from "@/components/ui/field";
@@ -17,6 +17,8 @@ import {Spinner} from "@/components/ui/spinner";
 import {toast} from "sonner";
 import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
+import {useAddress} from "@/app/hook/useAddress";
+
 
 interface EditAddressModalProps {
     address: Address;
@@ -34,17 +36,36 @@ const EditAddressModal: React.FC<EditAddressModalProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const token = Cookies.get("token");
     const router = useRouter();
-    const {reset, handleSubmit, register} = useForm<FieldValues>();
+    const {reset, handleSubmit, register , formState: {errors}} = useForm<AddressPayload>();
+    const {editAddressService} = useAddress();
 
     useEffect(() => {
-        reset({
-            street: address.street || "",
-            city: address.city || "",
-            province: address.province || "",
-            country: address.country,
-            postal_code: address.postal_code,
-        });
-    }, [address, reset]);
+        if (isOpen) {
+            reset({
+                street: address.street || "",
+                city: address.city || "",
+                province: address.province || "",
+                country: address.country,
+                postal_code: address.postal_code,
+            });
+        }
+    }, [address, reset , isOpen]);
+
+    const handleUpdate: SubmitHandler<AddressPayload> = async (values) => {
+        setIsLoading(true);
+        try {
+            await editAddressService(values, contactId, address.id);
+            toast.success("Address updated successfully.");
+            router.refresh();
+            onClose();
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                toast.error(e.message);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     const handleUpdateAddress: SubmitHandler<FieldValues> =
         async (values) => {
@@ -86,7 +107,7 @@ const EditAddressModal: React.FC<EditAddressModalProps> = ({
             isOpen={isOpen}
             onChange={(open) => !open && onClose()}
         >
-            <form onSubmit={handleSubmit(handleUpdateAddress)}>
+            <form onSubmit={handleSubmit(handleUpdate)}>
                 <FieldGroup className="mt-5">
                     <Field>
                         <Label className="text-primary font-semibold">Street</Label>
@@ -95,22 +116,32 @@ const EditAddressModal: React.FC<EditAddressModalProps> = ({
 
                     <Field>
                         <Label className="text-primary font-semibold">City</Label>
-                        <Input {...register("city")}  className="text-secondary-foreground"/>
+                        <Input {...register("city")} className="text-secondary-foreground"/>
                     </Field>
 
                     <Field>
                         <Label className="text-primary font-semibold">Province</Label>
-                        <Input {...register("province")}  className="text-secondary-foreground" />
+                        <Input {...register("province")} className="text-secondary-foreground"/>
                     </Field>
 
                     <Field>
                         <Label className="text-primary font-semibold">Country</Label>
-                        <Input {...register("country", {required: true})}   className="text-secondary-foreground"/>
+                        <Input {...register("country", {required: true})} className="text-secondary-foreground"/>
+                        {
+                            errors.country && (
+                                <p className="text-red-600 font-semibold text-xs">Country is required</p>
+                            )
+                        }
                     </Field>
 
                     <Field>
                         <Label className="text-primary font-semibold">Postal Code</Label>
-                        <Input {...register("postal_code", {required: true})}   className="text-secondary-foreground"/>
+                        <Input {...register("postal_code", {required: true})} className="text-secondary-foreground"/>
+                        {
+                            errors.postal_code && (
+                                <p className="text-red-600 font-semibold text-xs">Postal Code is required</p>
+                            )
+                        }
                     </Field>
                 </FieldGroup>
 
