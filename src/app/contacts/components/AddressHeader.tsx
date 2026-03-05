@@ -1,18 +1,18 @@
 "use client"
 import {AddButton} from "@/app/contacts/components/AddButton";
 import React from "react";
-import {Address} from "@/app/types/interfaces";
 import {AddModal} from "@/app/components/AddAddressModal";
 import {Header} from "@/app/components/Header";
+import {AddressPayload} from "@/app/types/interfaces";
 
 
 interface AddressHeaderProps {
-    address: Address[] | null;
     contactId: number;
+    handleAddAddress: ( payload: AddressPayload , contactId: number ) => void;
 }
 
 export const AddressHeader = (
-    {address, contactId}: AddressHeaderProps
+    { contactId , handleAddAddress}: AddressHeaderProps
 ) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const handleOpen = () => {
@@ -33,6 +33,7 @@ export const AddressHeader = (
             {
                 isOpen && (
                     <AddModal
+                        handleAddAddress={ handleAddAddress }
                         isOpen={isOpen}
                         onClose={handleClose}
                         contactId={contactId}

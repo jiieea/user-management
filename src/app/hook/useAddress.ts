@@ -1,14 +1,12 @@
 "use client"
 
-import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {Address, AddressPayload} from "@/app/types/interfaces";
 import Cookies from "js-cookie";
-import {addAddressRequest, deleteAddressRequest, editAddressRequest} from "@/lib/data-api";
+import {addAddressRequest, deleteAddressRequest, editAddressRequest, getAddressRequest} from "@/lib/data-api";
 
 export const useAddress = () => {
-    const router = useRouter();
-    const [address, setAddress] = useState<Address | null>(null);
+    const [address, setAddress] = useState<Address[] | null>(null);
 
 //     call add address
     const addAddressService = async (payload: AddressPayload, contactId: number) => {
@@ -17,7 +15,10 @@ export const useAddress = () => {
         if (!token) {
             throw new Error('Session Missing')
         }
-        return await addAddressRequest(payload, contactId, token);
+        const newAddress = await addAddressRequest(payload, contactId, token);
+        setAddress(prevState => prevState ? [...prevState, newAddress] : [newAddress]);
+
+        return newAddress;
     }
 
 
@@ -31,7 +32,7 @@ export const useAddress = () => {
     }
 
 
-    const editAddressService = async (payload: AddressPayload, contactId: number , addressId: number) => {
+    const editAddressService = async (payload: AddressPayload, contactId: number, addressId: number) => {
         const token = Cookies.get("token");
         if (!token) {
             throw new Error('Session Missing')
@@ -39,8 +40,24 @@ export const useAddress = () => {
 
         return await editAddressRequest(payload, addressId, contactId, token);
     }
+
+
+    const getAddressService = async (contactId: number) => {
+        if (!contactId) {
+            return;
+        }
+        try {
+            const address = await getAddressRequest(contactId);
+            setAddress(address ?? []);
+        } catch {
+            setAddress([]);
+        }
+    }
+
     return {
         addAddressService,
+        address,
+        getAddressService,
         editAddressService,
         deleteAddressService,
     }

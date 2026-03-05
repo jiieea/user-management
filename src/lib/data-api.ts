@@ -1,4 +1,6 @@
 import {AddressPayload} from "@/app/types/interfaces";
+import { Address } from "@/app/types/interfaces";
+import Cookies from "js-cookie";
 
 export const addAddressRequest = async (
     payload: AddressPayload, contactId: number,
@@ -52,7 +54,8 @@ export const editAddressRequest = async (
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
-            }
+            },
+            body: JSON.stringify(payload),
         });
 
     const result = await response.json();
@@ -64,6 +67,40 @@ export const editAddressRequest = async (
 }
 
 
-const getAddressRequest = async (addressId: string) => {
-//     ....
-}
+
+export const getAddressRequest = async (contactId: number) : Promise<Address[] | null> => {
+    const token = Cookies.get('token')
+
+    // Handle missing token gracefully
+    if (!token) {
+        console.error("No auth token found");
+        return null;
+    }
+
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_ADDRESS_API}/${contactId}/addresses`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+            },
+        });
+
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.errors.error);
+        }
+        if (!result.data || result.data.length === 0) {
+            return []; // Returning an empty array is usually safer than null for lists
+        }
+
+        return result.data as Address[] | null;
+    } catch (err) {
+        if(err instanceof Error) {
+            throw new Error(err.message);
+        }
+        return null;
+    }
+};

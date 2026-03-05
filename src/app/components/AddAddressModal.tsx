@@ -17,7 +17,7 @@ interface AddModalProps {
     isOpen: boolean;
     contactId: number;
     onClose: () => void;
-
+    handleAddAddress: (address: AddressPayload , contactId : number) => void;
 }
 
 export const AddModal: React.FC<AddModalProps> = (
@@ -29,7 +29,7 @@ export const AddModal: React.FC<AddModalProps> = (
 ) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const {addAddressService} = useAddress()
+    const {addAddressService} = useAddress();
     const {
         reset, register, handleSubmit , formState: { errors }
     } = useForm<AddressPayload>();
