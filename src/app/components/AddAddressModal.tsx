@@ -11,7 +11,6 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 import {AddressPayload} from "@/app/types/interfaces";
-import {useAddress} from "@/app/hook/useAddress";
 
 interface AddModalProps {
     isOpen: boolean;
@@ -25,11 +24,11 @@ export const AddModal: React.FC<AddModalProps> = (
         contactId,
         isOpen,
         onClose,
+        handleAddAddress,
     }
 ) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const {addAddressService} = useAddress();
     const {
         reset, register, handleSubmit , formState: { errors }
     } = useForm<AddressPayload>();
@@ -51,7 +50,7 @@ export const AddModal: React.FC<AddModalProps> = (
     const handleAddress: SubmitHandler<AddressPayload> = async (values) => {
         setIsLoading(true);
         try {
-            await addAddressService(values, contactId);
+            handleAddAddress(values, contactId);
             toast.success("Address added successfully.");
             onClose();
             router.refresh();

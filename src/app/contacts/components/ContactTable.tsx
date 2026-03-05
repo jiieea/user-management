@@ -7,6 +7,7 @@ import {useRouter} from "next/navigation";
 import {CiCirclePlus} from "react-icons/ci";
 import {AddModal} from "@/app/components/AddAddressModal";
 import {EditContactModal} from "@/app/components/EditContactModal";
+import {useAddress} from "@/app/hook/useAddress";
 
 interface ContactTableProps {
     contacts: Contact[];
@@ -18,7 +19,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({contacts}) => {
     const [selectedContactId, setSelectedContactId] = React.useState<number | null>(null);
     const [isEditOpen, setIsEditOpen] = React.useState(false);
     const [selectedContact, setSelectedContact] = React.useState<Contact | null>(null);
-
+    const { addAddressService } = useAddress();
     const openModal = (contactId: number) => {
         setSelectedContactId(contactId);
         setIsOpen(true);
@@ -98,6 +99,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({contacts}) => {
             </div>
             {isOpen && selectedContactId && (
                 <AddModal
+                    handleAddAddress={ addAddressService }
                     contactId={selectedContactId}
                     isOpen={isOpen}
                     onClose={closeModal}
