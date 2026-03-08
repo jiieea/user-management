@@ -4,8 +4,19 @@ import {Header} from "@/app/components/Header";
 import {AddContactDialog} from '@/app/components/AddContactDialog'
 import React from 'react'
 import {Button} from "@/components/ui/button";
+import {Contact, ContactPayload} from "@/app/types/interfaces";
 
-export const DashBoardHeader = () => {
+
+interface DashboardHeaderProps {
+    handleAddContact: (payload: ContactPayload) => void,
+    isLoading :boolean,
+}
+export const DashBoardHeader: React.FC<DashboardHeaderProps> = (
+    {
+        handleAddContact,
+        isLoading,
+    }
+) => {
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleOpen = () => {
@@ -25,6 +36,8 @@ export const DashBoardHeader = () => {
             </Header>
             {isOpen && (
                 <AddContactDialog
+                    handleAddContact={handleAddContact}
+                    isLoading={isLoading}
                     isOpen={isOpen}
                     onClose={handleClose}
                 />

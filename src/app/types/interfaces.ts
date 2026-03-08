@@ -14,8 +14,16 @@ export type AddressPayload = {
     postal_code: string,
 }
 
+export type ContactPayload = {
+    first_name: string,
+    last_name?: string,
+    email?: string,
+    phone: string
+    id: string
+}
 
-export type SignUpPayload  = {
+
+export type SignUpPayload = {
     username: string,
     password: string,
     name: string,
@@ -46,7 +54,7 @@ export interface Address {
 
 
 export interface DeleteContactProps {
-    id : string,
+    id: string,
 }
 
 export interface ContactModalForm {
@@ -62,7 +70,7 @@ export interface ModalContainerProps {
 }
 
 export interface ModalProps {
-    isOpen : boolean,
+    isOpen: boolean,
     onOpen: () => void,
     onClose: () => void,
 }
