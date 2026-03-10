@@ -1,6 +1,6 @@
 "use client"
 
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import {Address, AddressPayload} from "@/app/types/interfaces";
 import Cookies from "js-cookie";
 import {addAddressRequest, deleteAddressRequest, editAddressRequest, getAddressRequest} from "@/lib/data-api";

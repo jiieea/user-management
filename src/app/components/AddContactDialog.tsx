@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     DialogHeader,
     DialogTitle,
@@ -15,64 +15,50 @@ import {FieldValues, useForm, SubmitHandler} from 'react-hook-form';
 import {toast} from 'sonner';
 import {Spinner} from '@/components/ui/spinner';
 import {UpdateModalContainer} from "@/app/components/UpdateModalContainer";
+import {ContactPayload} from "@/app/types/interfaces";
 
 
 interface AddContactDialogProps {
     isOpen: boolean;
     onClose: () => void;
+    handleAddContact: (contact: ContactPayload) => void;
+    isLoading: boolean;
 }
 
 export const AddContactDialog: React.FC<AddContactDialogProps> = (
     {
         isOpen,
         onClose,
+        isLoading,
+        handleAddContact,
     }
 ) => {
-    const router = useRouter();
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const token = Cookies.get('token');
     const {
         reset,
         handleSubmit,
-        register
-    } = useForm<FieldValues>({
-        defaultValues: {
+        register,
+        formState: { errors },
+    } = useForm<ContactPayload>()
+
+    useEffect(() => {
+        reset({
             first_name: "",
             last_name: "",
             email: "",
             phone: ""
-        }
-    })
+        })
+    }, [reset]);
 
-    const handleAddContact: SubmitHandler<FieldValues> = async (values) => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_API!, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token!
-                },
-                body: JSON.stringify(values)
-            })
-            const result = await response.json();
-            if (!response.ok) {
-                const message = response.status === 404 ? result.errors
-                    : result.message || "Uploading Failed";
-                toast.error(message);
-                return;
-            }
-            toast.success('Add new contacts');
-            reset();
-            router.refresh();
-        } catch (e: unknown) {
-            if (e instanceof Error) {
-                toast.error(e.message)
-            }
-        } finally {
-            setIsLoading(false);
-            onClose();
-        }
+    const onHandleAddContact: SubmitHandler<ContactPayload> = async (values) => {
+       try{
+           handleAddContact(values);
+       }catch (e: unknown) {
+           if(e instanceof Error) {
+               toast.error(e.message);
+           }
+       }finally {
+           onClose();
+       }
     }
     return (
         <UpdateModalContainer
@@ -80,7 +66,7 @@ export const AddContactDialog: React.FC<AddContactDialogProps> = (
             isOpen={isOpen}
             onChange={(open) => !open && onClose()}
         >
-            <form onSubmit={handleSubmit(handleAddContact)}>
+            <form onSubmit={handleSubmit(onHandleAddContact)}>
                 <FieldGroup className="mt-5">
                     <Field>
                         <Label htmlFor="firstname">Firstname</Label>
@@ -89,14 +75,20 @@ export const AddContactDialog: React.FC<AddContactDialogProps> = (
                             placeholder="First name"
                             {...register('first_name', {required: true})}
                         />
+                        {
+                            errors.first_name && (
+                                <p className="text-destructive text-[12px]">First Name is Required</p>
+                            )
+                        }
                     </Field>
                     <Field>
                         <Label htmlFor="lastname">Lastname</Label>
                         <Input
                             placeholder="last name"
                             id="lastname"
-                            {...register('last_name', {required: true})} // Matches defaultValues
+                            {...register('last_name')} // Matches defaultValues
                         />
+
                     </Field>
                     <Field>
                         <Label htmlFor="email">email</Label>

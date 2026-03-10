@@ -1,16 +1,20 @@
 'use client'
-import React, {useMemo} from 'react'
+
+import React, {useEffect, useMemo} from 'react'
 import {Mail, Phone} from 'lucide-react';
 import {Contact} from '../types/interfaces';
 import {useRouter} from "next/navigation";
+import Skeleton from "@/components/asset/Skeleton";
 
 interface ContactTableProps {
-    contacts: Contact[]
+    contacts: Contact[],
+    getContacts: () => void,
 }
 
 export const ContactTable: React.FC<ContactTableProps> = (
     {
-        contacts
+        contacts,
+        getContacts,
     }
 ) => {
     const router = useRouter();
@@ -21,6 +25,11 @@ export const ContactTable: React.FC<ContactTableProps> = (
             return b.id - a.id;
         })
     }, [contacts]);
+
+
+    useEffect(() => {
+        getContacts();
+    }, [getContacts]);
     return (
         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm">
             <div className="p-6 border-b border-gray-50 flex justify-between items-center">
@@ -41,10 +50,14 @@ export const ContactTable: React.FC<ContactTableProps> = (
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                     {
-                        sortedContacts?.length === 0 ? (
-                            <div>
-                                No Contact added
-                            </div>
+                        sortedContacts.length === 0 ? (
+                            <tr>
+                                <td colSpan={4} className="text-center py-4">
+                                    No Contact added
+                                </td>
+                            </tr>
+                        ) : !sortedContacts ? (
+                            <Skeleton/>
                         ) : (
                             <>
                                 {sortedContacts.slice(0, 3).map((contact) => (

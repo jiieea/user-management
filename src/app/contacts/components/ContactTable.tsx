@@ -2,7 +2,7 @@
 
 import DeleteContactButton from "@/app/contacts/components/DeleteContactButton";
 import React from "react";
-import {Contact} from "@/app/types/interfaces";
+import {Contact, ContactPayload} from "@/app/types/interfaces";
 import {useRouter} from "next/navigation";
 import {CiCirclePlus} from "react-icons/ci";
 import {AddModal} from "@/app/components/AddAddressModal";
@@ -11,9 +11,10 @@ import {useAddress} from "@/app/hook/useAddress";
 
 interface ContactTableProps {
     contacts: Contact[];
+    handleEditContact: (contact: ContactPayload , contactId : number) => void;
 }
 
-export const ContactTable: React.FC<ContactTableProps> = ({contacts}) => {
+export const ContactTable: React.FC<ContactTableProps> = ({contacts , handleEditContact}) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = React.useState(false);
     const [selectedContactId, setSelectedContactId] = React.useState<number | null>(null);
@@ -109,6 +110,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({contacts}) => {
             {
                 isEditOpen && selectedContact &&(
                     <EditContactModal
+                        handleEditContact={ handleEditContact }
                         isOpen={isEditOpen}
                         contact={ selectedContact }
                         onClose={closeEditModal}
