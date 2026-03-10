@@ -1,7 +1,7 @@
 "use client"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {UpdateModalContainer} from "@/app/components/UpdateModalContainer";
-import {Contact} from "@/app/types/interfaces";
+import {Contact, ContactPayload} from "@/app/types/interfaces";
 import {
     DialogClose, DialogFooter
 } from '@/components/ui/dialog';
@@ -11,7 +11,7 @@ import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
 import {useRouter} from "next/navigation";
 import {Spinner} from "@/components/ui/spinner";
-import {FieldValues, SubmitHandler, useForm} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "sonner";
 import Cookies from "js-cookie";
 
@@ -20,11 +20,13 @@ interface EditContactModalProps {
     contact: Contact
     isOpen: boolean,
     onClose: () => void;
+    handleEditContact: (contact: ContactPayload, contactId: number) => void;
 }
 
 export const EditContactModal: React.FC<EditContactModalProps> = (
     {
         contact,
+        handleEditContact,
         isOpen,
         onClose,
     }
@@ -35,8 +37,9 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
     const {
         reset,
         register,
-        handleSubmit
-    } = useForm<FieldValues>();
+        handleSubmit,
+        formState: {errors},
+    } = useForm<ContactPayload>();
 
     useEffect(() => {
         reset({
@@ -47,33 +50,17 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
         })
     }, [reset, contact]);
 
-    const handleEditContact: SubmitHandler<FieldValues> = async (values) => {
+    const editContact: SubmitHandler<ContactPayload> = async (values) => {
         setIsLoading(true);
         try {
-            const response = await
-                fetch(`${process.env.NEXT_PUBLIC_CONTACT_API}/${contact.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token!
-                    },
-                    body: JSON.stringify(values)
-                })
-
-            const result = await response.json();
-            if (!response.ok) {
-                toast.error(result.errors.error);
-                return;
-            }
-            toast.success("Contact Updated");
-            router.refresh();
-            onClose();
+            handleEditContact(values, Number(contact.id))
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);
             }
         } finally {
             setIsLoading(false);
+            onClose();
         }
     }
     return (
@@ -83,7 +70,7 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
                 isOpen={isOpen}
                 onChange={(open) => !open && onClose()}
             >
-                <form onSubmit={handleSubmit(handleEditContact)}>
+                <form onSubmit={handleSubmit(editContact)}>
                     <FieldGroup className="mt-5">
                         <Field>
                             <Label htmlFor="firstname" className="text-primary font-semibold">Firstname</Label>
@@ -93,6 +80,11 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
                                 className="text-primary"
                                 {...register('first_name')}
                             />
+                            {
+                                errors.first_name && (
+                                    <p className="text-destructive text-[12px]">First Name is Required</p>
+                                )
+                            }
                         </Field>
                         <Field>
                             <Label htmlFor="lastname" className="text-primary font-semibold">Lastname</Label>
@@ -108,7 +100,7 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
                             <Input
                                 className="text-primary"
                                 id="email" placeholder='test@example.com'
-                                   {...register('email')}
+                                {...register('email')}
                             />
                         </Field>
                         <Field>

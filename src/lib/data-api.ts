@@ -135,7 +135,46 @@ export const addContactRequest = async (payload: ContactPayload, token: string) 
     return result.data;
 }
 
-export  const getContactRequest = async (token : string) => {
+
+export const editContactRequest = async (payload: ContactPayload, contactId: number, token: string) => {
+    if (!token) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_CONTACT_API}/${contactId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token!
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+            let errorMessage = "An error occurred";
+
+            if (Array.isArray(result.errors)) {
+                errorMessage = result.errors[0]?.message || "Invalid input format";
+            } else if (typeof result.errors === 'string') {
+                errorMessage = result.errors;
+            } else if (result.message) {
+                errorMessage = result.message;
+            }
+            throw new Error(errorMessage);
+        }
+
+        return result.data;
+
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            throw new Error(err.message);
+        }
+    }
+}
+
+export const getContactRequest = async (token: string) => {
     if (!token) {
         throw new Error("Cookie not found");
     }
@@ -155,5 +194,31 @@ export  const getContactRequest = async (token : string) => {
             throw e;
         }
         return null;
+    }
+}
+
+
+export const deleteContactRequest = async (token: string , contactId : number) => {
+    if (!token) {
+        throw new Error("Cookie not found");
+    }
+    try {
+        const  response = await fetch(`${process.env.NEXT_PUBLIC_CONTACT_API!}/${contactId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(result.errors);
+        }
+        return result.data;
+    }catch (e: unknown) {
+        if (e instanceof Error) {
+            throw new Error(e.message);
+        }
     }
 }

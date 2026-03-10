@@ -36,7 +36,8 @@ export const AddContactDialog: React.FC<AddContactDialogProps> = (
     const {
         reset,
         handleSubmit,
-        register
+        register,
+        formState: { errors },
     } = useForm<ContactPayload>()
 
     useEffect(() => {
@@ -74,14 +75,20 @@ export const AddContactDialog: React.FC<AddContactDialogProps> = (
                             placeholder="First name"
                             {...register('first_name', {required: true})}
                         />
+                        {
+                            errors.first_name && (
+                                <p className="text-destructive text-[12px]">First Name is Required</p>
+                            )
+                        }
                     </Field>
                     <Field>
                         <Label htmlFor="lastname">Lastname</Label>
                         <Input
                             placeholder="last name"
                             id="lastname"
-                            {...register('last_name', {required: true})} // Matches defaultValues
+                            {...register('last_name')} // Matches defaultValues
                         />
+
                     </Field>
                     <Field>
                         <Label htmlFor="email">email</Label>

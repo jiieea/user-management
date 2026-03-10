@@ -4,6 +4,7 @@ import React, {useEffect, useMemo} from 'react'
 import {Mail, Phone} from 'lucide-react';
 import {Contact} from '../types/interfaces';
 import {useRouter} from "next/navigation";
+import Skeleton from "@/components/asset/Skeleton";
 
 interface ContactTableProps {
     contacts: Contact[],
@@ -49,10 +50,14 @@ export const ContactTable: React.FC<ContactTableProps> = (
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                     {
-                        sortedContacts?.length === 0 ? (
-                            <div>
-                                No Contact added
-                            </div>
+                        sortedContacts.length === 0 ? (
+                            <tr>
+                                <td colSpan={4} className="text-center py-4">
+                                    No Contact added
+                                </td>
+                            </tr>
+                        ) : !sortedContacts ? (
+                            <Skeleton/>
                         ) : (
                             <>
                                 {sortedContacts.slice(0, 3).map((contact) => (

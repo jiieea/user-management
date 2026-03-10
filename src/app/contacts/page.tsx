@@ -1,8 +1,6 @@
-import {ContactHeader} from "@/app/contacts/components/ContactHeader";
-import {ContactTable} from "@/app/contacts/components/ContactTable";
-import SearchContact from "@/app/contacts/components/SearchContact";
-import searchContacts from "@/app/action/searchContacts";
 
+import searchContacts from "@/app/action/searchContacts";
+import {ContactContainer} from "@/app/contacts/components/ContactContainer";
 
 interface PageProps {
    searchParams : Promise<{ query : string}>
@@ -11,11 +9,12 @@ interface PageProps {
 export default async function ContactsPage({ searchParams }: PageProps) {
     const { query } = await searchParams;
     const contacts = await searchContacts(query);
+    if(!contacts) {
+        return null;
+    }
     return (
         <div className="space-y-6">
-            <ContactHeader />
-            <SearchContact />
-            <ContactTable contacts={contacts!} />
+           <ContactContainer contacts={contacts}/>
         </div>
     );
 }
