@@ -17,30 +17,15 @@ import {toast} from "sonner";
 import {Spinner} from "@/components/ui/spinner";
 import {useRouter} from "next/navigation";
 
-const DeleteContactButton: React.FC<DeleteContactProps> = ({id}) => {
-    const token = Cookies.get('token');
-    const router = useRouter();
+
+
+
+const DeleteContactButton: React.FC<DeleteContactProps> = ({id , handleDeleteContact }) => {
     const [ isLoading, setIsLoading ] = React.useState(false);
-    const handleDeleteContact = async () => {
+    const handleDelete = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_CONTACT_API}/${id}` ,{
-                method: 'DELETE',
-                headers : {
-                    'Content-Type': 'application/json',
-                    'Authorization': token!
-                }
-            })
-            const result = await response.json();
-            console.debug(JSON.stringify(result));
-            if (!response.ok) {
-                const errorData = await response.json();
-                toast.error(errorData.message || 'Failed to delete');
-            }
-
-            toast.success('Contact deleted successfully.');
-            router.refresh();
-            return { data: true };
+           handleDeleteContact(Number(id));
         }catch (error : unknown) {
             return {
                 data: false,
@@ -65,7 +50,7 @@ const DeleteContactButton: React.FC<DeleteContactProps> = ({id}) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleDeleteContact()}>{
+                    <AlertDialogAction onClick={() => handleDelete()}>{
                         isLoading ? <Spinner/> : "Delete"
                     }</AlertDialogAction>
                 </AlertDialogFooter>

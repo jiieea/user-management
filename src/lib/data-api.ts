@@ -151,21 +151,21 @@ export const editContactRequest = async (payload: ContactPayload, contactId: num
             body: JSON.stringify(payload),
         });
 
-        const result = await response.json();
+        const data = await response.json();
         if (!response.ok) {
-            let errorMessage = "An error occurred";
+            let errMsg = "An error occurred";
 
-            if (Array.isArray(result.errors)) {
-                errorMessage = result.errors[0]?.message || "Invalid input format";
-            } else if (typeof result.errors === 'string') {
-                errorMessage = result.errors;
-            } else if (result.message) {
-                errorMessage = result.message;
+            if (Array.isArray(data.errors)) {
+                errMsg = data.errors[0]?.message || "Invalid input format";
+            } else if (typeof data.errors === 'string') {
+                errMsg = data.errors;
+            } else if (data.message) {
+                errMsg = data.message;
             }
-            throw new Error(errorMessage);
+            throw new Error(errMsg);
         }
 
-        return result.data;
+        return data.data;
 
     } catch (err: unknown) {
         if (err instanceof Error) {
