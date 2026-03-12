@@ -76,6 +76,8 @@ export const useContact = () => {
         setIsLoading(true);
         try {
             await deleteContactRequest(token, contactId);
+            toast.success("Contact Deleted");
+            router.refresh();
         }catch(e: unknown) {
             if(e instanceof Error) {
                 throw e;

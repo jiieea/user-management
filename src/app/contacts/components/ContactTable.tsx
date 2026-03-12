@@ -2,25 +2,30 @@
 
 import DeleteContactButton from "@/app/contacts/components/DeleteContactButton";
 import React from "react";
-import {Contact, ContactPayload} from "@/app/types/interfaces";
+import {AddressPayload, Contact, ContactPayload} from "@/app/types/interfaces";
 import {useRouter} from "next/navigation";
 import {CiCirclePlus} from "react-icons/ci";
 import {AddModal} from "@/app/components/AddAddressModal";
 import {EditContactModal} from "@/app/components/EditContactModal";
-import {useAddress} from "@/app/hook/useAddress";
 
 interface ContactTableProps {
     contacts: Contact[];
-    handleEditContact: (contact: ContactPayload , contactId : number) => void;
+    handleEditContact: (contact: ContactPayload, contactId: number) => void;
+    handleDeleteContact: (id: number) => void;
+    handleAddAddress: (payload: AddressPayload, contactId: number) => void;
 }
 
-export const ContactTable: React.FC<ContactTableProps> = ({contacts , handleEditContact}) => {
+export const ContactTable: React.FC<ContactTableProps> = ({
+                                                              contacts,
+                                                              handleEditContact,
+                                                              handleDeleteContact,
+                                                              handleAddAddress
+                                                          }) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = React.useState(false);
     const [selectedContactId, setSelectedContactId] = React.useState<number | null>(null);
     const [isEditOpen, setIsEditOpen] = React.useState(false);
     const [selectedContact, setSelectedContact] = React.useState<Contact | null>(null);
-    const { addAddressService } = useAddress();
     const openModal = (contactId: number) => {
         setSelectedContactId(contactId);
         setIsOpen(true);
@@ -77,7 +82,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({contacts , handleEdit
                                         className="text-primary hover:underline text-sm font-medium mr-4"
                                     >Edit
                                     </button>
-                                    <DeleteContactButton id={contact.id}/>
+                                    <DeleteContactButton handleDeleteContact={handleDeleteContact} id={contact.id}/>
                                 </td>
 
                                 <td className="px-4">
@@ -100,7 +105,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({contacts , handleEdit
             </div>
             {isOpen && selectedContactId && (
                 <AddModal
-                    handleAddAddress={ addAddressService }
+                    handleAddAddress={handleAddAddress}
                     contactId={selectedContactId}
                     isOpen={isOpen}
                     onClose={closeModal}
@@ -108,11 +113,11 @@ export const ContactTable: React.FC<ContactTableProps> = ({contacts , handleEdit
             )}
 
             {
-                isEditOpen && selectedContact &&(
+                isEditOpen && selectedContact && (
                     <EditContactModal
-                        handleEditContact={ handleEditContact }
+                        handleEditContact={handleEditContact}
                         isOpen={isEditOpen}
-                        contact={ selectedContact }
+                        contact={selectedContact}
                         onClose={closeEditModal}
                     />
                 )

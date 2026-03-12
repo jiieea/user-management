@@ -55,6 +55,7 @@ export interface Address {
 
 export interface DeleteContactProps {
     id: string,
+    handleDeleteContact: (id: number) => void,
 }
 
 export interface ContactModalForm {

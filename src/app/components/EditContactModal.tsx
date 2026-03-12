@@ -32,8 +32,6 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
     }
 ) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const token = Cookies.get('token');
-    const router = useRouter();
     const {
         reset,
         register,
