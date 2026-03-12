@@ -4,11 +4,10 @@ import {Header} from "@/app/components/Header";
 import {AddContactDialog} from '@/app/components/AddContactDialog'
 import React from 'react'
 import {Button} from "@/components/ui/button";
-import {useContact} from "@/app/hook/useContact";
 import {ContactPayload} from "@/app/types/interfaces";
 
 interface Props {
-    handleAddContact: (payload : ContactPayload) => void;
+    handleAddContact: (payload : ContactPayload) => Promise<void>;
     isLoading: boolean;
 }
 export const ContactHeader = ({

@@ -55,7 +55,7 @@ export interface Address {
 
 export interface DeleteContactProps {
     id: string,
-    handleDeleteContact: (id: number) => void,
+    handleDeleteContact: (id: number) => Promise<void>,
 }
 
 export interface ContactModalForm {
@@ -76,3 +76,39 @@ export interface ModalProps {
     onClose: () => void,
 }
 
+export interface EditContactModalProps {
+    contact: Contact
+    isOpen: boolean,
+    onClose: () => void;
+    handleEditContact: (contact: ContactPayload, contactId: number) => Promise<void>;
+}
+
+export interface AddContactDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    handleAddContact: (contact: ContactPayload) => Promise<void>;
+    isLoading: boolean;
+}
+
+
+export interface AddModalProps {
+    isOpen: boolean;
+    contactId: number;
+    onClose: () => void;
+    handleAddAddress: (address: AddressPayload, contactId: number) => Promise<void>;
+}
+
+
+export interface EditAddressModalProps {
+    address: Address;
+    contactId: number;
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+
+export  interface AddressClientProps {
+    contactId: number;
+    addresses: Address[];
+    getAddress: (contactId: number) => void;
+}

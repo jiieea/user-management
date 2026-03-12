@@ -27,9 +27,7 @@ export const useContact = () => {
             toast.success("Add New Contact");
             router.refresh();
         } catch (e: unknown) {
-            if (e instanceof Error) {
                 throw e;
-            }
         } finally {
             setIsLoading(false);
         }

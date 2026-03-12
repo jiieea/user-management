@@ -3,30 +3,30 @@ import {Address} from "@/app/types/interfaces";
 import React, {useState} from "react";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
-import {useAddress} from "@/app/hook/useAddress";
 
 interface DeleteAddressModalProps {
     address: Address,
     onClose: () => void,
     contactId: number,
     isOpen: boolean,
+    handleDeleteAddress: (contactId: number, addressId: number) => Promise<void>,
 }
 
 export function DeleteAddressModal({
                                        address,
                                        isOpen,
                                        onClose,
-                                       contactId
+                                       contactId,
+                                       handleDeleteAddress,
                                    }: DeleteAddressModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const {deleteAddressService} = useAddress();
 
     if (!isOpen) return null;
-    const handleDeleteAddress = async () => {
+    const deleteAddress = async () => {
         setIsLoading(true);
         try {
-            await deleteAddressService(contactId, address.id);
+            await handleDeleteAddress(contactId, address.id);
             toast.success("Address deleted successfully.");
             router.refresh();
         } catch (error: unknown) {
@@ -60,7 +60,7 @@ export function DeleteAddressModal({
                         </button>
 
                         <button
-                            onClick={handleDeleteAddress}
+                            onClick={deleteAddress}
                             disabled={isLoading}
                             className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
                         >

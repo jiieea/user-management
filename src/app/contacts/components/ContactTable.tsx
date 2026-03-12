@@ -10,9 +10,9 @@ import {EditContactModal} from "@/app/components/EditContactModal";
 
 interface ContactTableProps {
     contacts: Contact[];
-    handleEditContact: (contact: ContactPayload, contactId: number) => void;
-    handleDeleteContact: (id: number) => void;
-    handleAddAddress: (payload: AddressPayload, contactId: number) => void;
+    handleEditContact: (contact: ContactPayload, contactId: number) => Promise<void>;
+    handleDeleteContact: (id: number) => Promise<void>;
+    handleAddAddress: (payload: AddressPayload, contactId: number) => Promise<void>;
 }
 
 export const ContactTable: React.FC<ContactTableProps> = ({

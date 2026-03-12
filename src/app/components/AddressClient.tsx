@@ -1,6 +1,6 @@
 "use client";
 
-import {Address} from "@/app/types/interfaces";
+import {Address , AddressClientProps} from "@/app/types/interfaces";
 import {AddressCard} from "@/app/components/AddressTable";
 import EditAddressModal from "@/app/components/EditAddressModal";
 import React, {useEffect, useState} from "react";
@@ -8,14 +8,11 @@ import {DeleteAddressModal} from "@/app/components/DeleteAddressModal";
 import {Mail} from "lucide-react";
 import {Skeleton} from "@/components/ui/skeleton"
 import {Card, CardHeader, CardContent} from "@/components/ui/card";
+import {useAddress} from "@/app/hook/useAddress";
 
-interface Props {
-    contactId: number;
-    addresses: Address[];
-    getAddress: (contactId: number) => void;
-}
 
-const AddressesClient: React.FC<Props> = ({
+
+const AddressesClient: React.FC<AddressClientProps> = ({
                                               contactId,
                                               addresses,
                                               getAddress,
@@ -23,7 +20,7 @@ const AddressesClient: React.FC<Props> = ({
     const [selectedAddress, setSelectedAddress] =
         useState<Address | null>(null);
     const [deleteAddress, setDeleteAddress] = useState<Address | null>(null);
-
+    const { deleteAddressService } = useAddress();
     useEffect(() => {
         getAddress(contactId)
     }, [getAddress, contactId])
@@ -51,7 +48,7 @@ const AddressesClient: React.FC<Props> = ({
                             <Mail className="text-gray-400"/>
                         </div>
                         <h3 className="text-lg font-medium text-gray-900">
-                            No addresseses found
+                            No addresses found
                         </h3>
                         <p className="text-gray-500">
                             This directory is currently empty.
@@ -74,6 +71,7 @@ const AddressesClient: React.FC<Props> = ({
 
             {deleteAddress && (
                 <DeleteAddressModal
+                    handleDeleteAddress={ deleteAddressService }
                     address={deleteAddress}
                     contactId={contactId}
                     isOpen={!!deleteAddress}

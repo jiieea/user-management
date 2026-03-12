@@ -1,6 +1,6 @@
 import {cookies} from "next/headers";
 import {Contact} from "@/app/types/interfaces";
-import {getContact} from "@/app/action/getContact";
+import {getContactRequest} from "@/lib/data-api";
 
 const searchContacts = async (query: string): Promise<Contact[] | null> => {
     const cookiesStore = await cookies();
@@ -9,11 +9,11 @@ const searchContacts = async (query: string): Promise<Contact[] | null> => {
     try {
         const url = new URL(process.env.NEXT_PUBLIC_CONTACT_API!);
         if (!query) {
-            return await getContact();
+            return await getContactRequest(token!);
         }
 
         url.searchParams.set('search', query);
-        const response = await fetch(url.toString(), {
+    const response = await fetch(url.toString(), {
             method: 'GET',
             headers: {
                 'Authorization': token!,

@@ -8,7 +8,7 @@ import {AddressPayload} from "@/app/types/interfaces";
 
 interface AddressHeaderProps {
     contactId: number;
-    handleAddAddress: ( payload: AddressPayload , contactId: number ) => void;
+    handleAddAddress: ( payload: AddressPayload , contactId: number ) => Promise<void>;
 }
 
 export const AddressHeader = (

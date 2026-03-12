@@ -10,14 +10,8 @@ import {Spinner} from "@/components/ui/spinner";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
-import {AddressPayload} from "@/app/types/interfaces";
+import {AddressPayload, AddModalProps} from "@/app/types/interfaces";
 
-interface AddModalProps {
-    isOpen: boolean;
-    contactId: number;
-    onClose: () => void;
-    handleAddAddress: (address: AddressPayload , contactId : number) => void;
-}
 
 export const AddModal: React.FC<AddModalProps> = (
     {
@@ -30,7 +24,7 @@ export const AddModal: React.FC<AddModalProps> = (
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const {
-        reset, register, handleSubmit , formState: { errors }
+        reset, register, handleSubmit, formState: {errors}
     } = useForm<AddressPayload>();
 
     useEffect(() => {
@@ -45,12 +39,12 @@ export const AddModal: React.FC<AddModalProps> = (
                 }
             )
         }
-    }, [reset , isOpen]);
+    }, [reset, isOpen]);
 
     const handleAddress: SubmitHandler<AddressPayload> = async (values) => {
         setIsLoading(true);
         try {
-            handleAddAddress(values, contactId);
+            await handleAddAddress(values, contactId);
             toast.success("Address added successfully.");
             onClose();
             router.refresh();

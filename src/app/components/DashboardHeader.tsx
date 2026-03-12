@@ -4,11 +4,11 @@ import {Header} from "@/app/components/Header";
 import {AddContactDialog} from '@/app/components/AddContactDialog'
 import React from 'react'
 import {Button} from "@/components/ui/button";
-import {Contact, ContactPayload} from "@/app/types/interfaces";
+import { ContactPayload} from "@/app/types/interfaces";
 
 
 interface DashboardHeaderProps {
-    handleAddContact: (payload: ContactPayload) => void,
+    handleAddContact: (payload: ContactPayload) => Promise<void>,
     isLoading :boolean,
 }
 export const DashBoardHeader: React.FC<DashboardHeaderProps> = (

@@ -12,20 +12,14 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {DeleteContactProps} from "@/app/types/interfaces";
-import Cookies from "js-cookie";
-import {toast} from "sonner";
 import {Spinner} from "@/components/ui/spinner";
-import {useRouter} from "next/navigation";
-
-
-
 
 const DeleteContactButton: React.FC<DeleteContactProps> = ({id , handleDeleteContact }) => {
     const [ isLoading, setIsLoading ] = React.useState(false);
     const handleDelete = async () => {
         setIsLoading(true);
         try {
-           handleDeleteContact(Number(id));
+           await handleDeleteContact(Number(id));
         }catch (error : unknown) {
             return {
                 data: false,

@@ -1,7 +1,7 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import {UpdateModalContainer} from "@/app/components/UpdateModalContainer";
-import {Contact, ContactPayload} from "@/app/types/interfaces";
+import {ContactPayload, EditContactModalProps} from "@/app/types/interfaces";
 import {
     DialogClose, DialogFooter
 } from '@/components/ui/dialog';
@@ -9,19 +9,10 @@ import {Field, FieldGroup} from "@/components/ui/field"
 import {Label} from '@/components/ui/label';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
-import {useRouter} from "next/navigation";
 import {Spinner} from "@/components/ui/spinner";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "sonner";
-import Cookies from "js-cookie";
 
-
-interface EditContactModalProps {
-    contact: Contact
-    isOpen: boolean,
-    onClose: () => void;
-    handleEditContact: (contact: ContactPayload, contactId: number) => void;
-}
 
 export const EditContactModal: React.FC<EditContactModalProps> = (
     {
@@ -51,14 +42,14 @@ export const EditContactModal: React.FC<EditContactModalProps> = (
     const editContact: SubmitHandler<ContactPayload> = async (values) => {
         setIsLoading(true);
         try {
-            handleEditContact(values, Number(contact.id))
+            await handleEditContact(values, Number(contact.id))
+            onClose();
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);
             }
         } finally {
             setIsLoading(false);
-            onClose();
         }
     }
     return (
