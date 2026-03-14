@@ -1,10 +1,14 @@
 "use client"
 
-
 import {useRouter} from "next/navigation";
 import {useState} from "react";
 import Cookies from "js-cookie";
-import {addContactRequest, deleteContactRequest, editContactRequest, getContactRequest} from "@/lib/data-api";
+import {
+    addContactRequest,
+    deleteContactRequest,
+    editContactRequest,
+    getContactRequest,
+} from "@/lib/data-api";
 import {Contact, ContactPayload} from "@/app/types/interfaces";
 import {toast} from "sonner";
 
@@ -27,7 +31,7 @@ export const useContact = () => {
             toast.success("Add New Contact");
             router.refresh();
         } catch (e: unknown) {
-                throw e;
+            throw e;
         } finally {
             setIsLoading(false);
         }
@@ -61,23 +65,22 @@ export const useContact = () => {
             if (e instanceof Error) {
                 throw e;
             }
-        }finally {
+        } finally {
             setIsLoading(false);
         }
     }
 
-    const deleteContactService  = async (contactId: number) => {
+    const deleteContactService = async (contactId: number) => {
         const token = Cookies.get('token');
         if (!token) {
             return;
         }
-        setIsLoading(true);
         try {
             await deleteContactRequest(token, contactId);
             toast.success("Contact Deleted");
             router.refresh();
-        }catch(e: unknown) {
-            if(e instanceof Error) {
+        } catch (e: unknown) {
+            if (e instanceof Error) {
                 throw e;
             }
         }

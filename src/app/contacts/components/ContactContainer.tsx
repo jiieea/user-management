@@ -14,8 +14,8 @@ interface ContactContainerProps {
 export const ContactContainer = ({
                                      contacts,
                                  }: ContactContainerProps) => {
-    const {addContactService, editContactService, isLoading, deleteContactService} = useContact();
-    const {addAddressService} = useAddress()
+    const {addContactService, editContactService, isLoading, deleteContactService } = useContact();
+    const {addAddressService} = useAddress();
     return (
         <>
             <ContactHeader handleAddContact={addContactService} isLoading={isLoading}/>

@@ -43,11 +43,16 @@ export const useAddress = () => {
 
 
     const getAddressService = async (contactId: number) => {
+        const token = Cookies.get("token");
+
+        if (!token) {
+            throw new Error('Session Missing');
+        }
         if (!contactId) {
             return;
         }
         try {
-            const address = await getAddressRequest(contactId);
+            const address = await getAddressRequest(contactId, token);
             setAddress(address ?? []);
         } catch {
             setAddress([]);

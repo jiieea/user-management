@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import {DeleteContactProps} from "@/app/types/interfaces";
 import {Spinner} from "@/components/ui/spinner";
+import {toast} from "sonner";
 
 const DeleteContactButton: React.FC<DeleteContactProps> = ({id , handleDeleteContact }) => {
     const [ isLoading, setIsLoading ] = React.useState(false);
@@ -21,10 +22,9 @@ const DeleteContactButton: React.FC<DeleteContactProps> = ({id , handleDeleteCon
         try {
            await handleDeleteContact(Number(id));
         }catch (error : unknown) {
-            return {
-                data: false,
-                message: error instanceof Error ? error.message : "Unknown error"
-            };
+           if(error instanceof Error) {
+               toast.error(error.message);
+           }
         }finally {
             setIsLoading(false);
         }

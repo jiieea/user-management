@@ -14,7 +14,7 @@ export default async function ContactsPage({ searchParams }: PageProps) {
     }
     return (
         <div className="space-y-6">
-           <ContactContainer contacts={contacts}/>
+           <ContactContainer query={ query } contacts={contacts}/>
         </div>
     );
 }
