@@ -8,7 +8,7 @@ import {
     deleteContactRequest,
     editContactRequest,
     getContactRequest,
-} from "@/lib/data-api";
+} from "@/services/contact.service";
 import {Contact, ContactPayload} from "@/app/types/interfaces";
 import {toast} from "sonner";
 
@@ -16,7 +16,6 @@ export const useContact = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [contacts, setContacts] = useState<Contact[]>([]);
-
 
     const addContactService = async (payload: ContactPayload) => {
         const token = Cookies.get('token');

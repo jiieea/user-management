@@ -1,6 +1,7 @@
 import {cookies} from "next/headers";
 import {Contact} from "@/app/types/interfaces";
-import {getContactRequest} from "@/lib/data-api";
+import {getContactRequest} from "@/services/contact.service";
+import {requestHeaders} from "@/lib/data-api";
 
 const searchContacts = async (query: string): Promise<Contact[] | null> => {
     const cookiesStore = await cookies();
@@ -11,14 +12,13 @@ const searchContacts = async (query: string): Promise<Contact[] | null> => {
         if (!query) {
             return await getContactRequest(token!);
         }
-
+        if (!token) {
+            return [];
+        }
         url.searchParams.set('search', query);
-    const response = await fetch(url.toString(), {
+        const response = await fetch(url.toString(), {
             method: 'GET',
-            headers: {
-                'Authorization': token!,
-                'Content-Type': 'application/json'
-            },
+            headers: requestHeaders(token),
             cache: 'no-cache',
         })
 
@@ -28,8 +28,7 @@ const searchContacts = async (query: string): Promise<Contact[] | null> => {
         }
 
         return result.data as Contact[];
-    } catch (error) {
-        console.error(error);
+    } catch {
         return [];
     }
 }

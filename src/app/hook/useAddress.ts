@@ -3,7 +3,12 @@
 import {useState} from "react";
 import {Address, AddressPayload} from "@/app/types/interfaces";
 import Cookies from "js-cookie";
-import {addAddressRequest, deleteAddressRequest, editAddressRequest, getAddressRequest} from "@/lib/data-api";
+import {
+    addAddressRequest,
+    deleteAddressRequest,
+    editAddressRequest,
+    getAddressRequest
+} from "@/services/address.service";
 
 export const useAddress = () => {
     const [address, setAddress] = useState<Address[] | null>(null);

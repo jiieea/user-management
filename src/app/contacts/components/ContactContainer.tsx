@@ -8,6 +8,7 @@ import {useContact} from "@/app/hook/useContact";
 import {useAddress} from "@/app/hook/useAddress";
 
 interface ContactContainerProps {
+    query: string;
     contacts: Contact[];
 }
 

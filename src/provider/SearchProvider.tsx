@@ -1,12 +1,14 @@
 "use client"
 import React, {createContext, Dispatch, SetStateAction, useContext, useState} from "react";
+
 interface SearchContextProps {
     searchValue: string
-    setSearchValue : Dispatch<SetStateAction<string>>
+    setSearchValue: Dispatch<SetStateAction<string>>
 }
+
 const SearchContext = createContext<SearchContextProps | undefined>(undefined);
 
-const SearchContextProvider: React.FC<{children: React.ReactNode}>= (
+const SearchContextProvider: React.FC<{ children: React.ReactNode }> = (
     {
         children
     }
@@ -17,7 +19,7 @@ const SearchContextProvider: React.FC<{children: React.ReactNode}>= (
         setSearchValue
     }
 
-    return(
+    return (
         <SearchContext.Provider value={searchContextValue}>
             {children}
         </SearchContext.Provider>
@@ -27,10 +29,10 @@ const SearchContextProvider: React.FC<{children: React.ReactNode}>= (
 // hook
 export const useSearchContext = () => {
     const context = useContext(SearchContext);
-    if(context === undefined) {
+    if (context === undefined) {
         throw new Error("useSearchContext must be used within the context provider");
     }
     return context;
 }
 
-export  default  SearchContextProvider
+export default SearchContextProvider

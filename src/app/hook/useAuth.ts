@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import {useCallback, useEffect, useState} from "react";
 import {LoginPayload, SignUpPayload, User} from "@/app/types/interfaces";
 import {useRouter} from "next/navigation";
-import {getMeRequest, loginRequest, logoutRequest, signUpRequest} from "@/lib/auth-api";
+import {getMeRequest, loginRequest, logoutRequest, signUpRequest} from "@/lib/auth.service";
 import {toast} from "sonner";
 
 export const useAuth = () => {
